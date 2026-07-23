@@ -9,6 +9,9 @@ const { Pool } = require('pg');
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3001;
+const corsOrigins = process.env.CORS_ORIGIN
+    ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim()).filter(Boolean)
+    : true;
 const pool = process.env.DATABASE_URL ? new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: process.env.NODE_ENV === 'production' || process.env.DATABASE_URL.includes('supabase') ? { rejectUnauthorized: false } : false,
@@ -17,7 +20,8 @@ const pool = process.env.DATABASE_URL ? new Pool({
     connectionTimeoutMillis: 10000
 }) : null;
 
-app.use(cors({ origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : true }));
+app.set('trust proxy', 1);
+app.use(cors({ origin: corsOrigins }));
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -113,6 +117,8 @@ app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.ht
 app.use((req, res) => res.status(404).json({ error: 'Route not found' }));
 app.use((error, req, res, next) => { console.error(error); res.status(500).json({ error: 'Internal server error' }); });
 
-initializeDatabase().catch(error => console.error('Database initialization failed:', error.message));
-if (require.main === module) app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
+const databaseInitialization = initializeDatabase().catch(error => {
+    console.error('Database initialization failed:', error.message);
+});
+if (require.main === module) databaseInitialization.finally(() => app.listen(PORT, () => console.log(`Server listening on port ${PORT}`)));
 module.exports = app;
