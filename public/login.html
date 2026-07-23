@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
   <!-- Font Awesome 6 (free icons) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="/config.js"></script>
   <style>
     * {
       margin: 0;
@@ -486,7 +487,7 @@
 
       try {
         // Validate user through the backend API
-        const response = await fetch(`${window.location.origin}/api/login`, {
+        const response = await fetch(`${(window.APP_CONFIG?.apiUrl || window.location.origin).replace(/\/$/, '')}/api/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
@@ -513,7 +514,7 @@
           }, 800);
         } else {
           // Check if user exists with this email
-          const existingResponse = await fetch(`${window.location.origin}/api/check-user`, {
+          const existingResponse = await fetch(`${(window.APP_CONFIG?.apiUrl || window.location.origin).replace(/\/$/, '')}/api/check-user`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email })
@@ -575,7 +576,7 @@
 
       try {
         // Check if user already exists in database
-        const existsResponse = await fetch(`${window.location.origin}/api/check-user`, {
+        const existsResponse = await fetch(`${(window.APP_CONFIG?.apiUrl || window.location.origin).replace(/\/$/, '')}/api/check-user`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email })
@@ -587,7 +588,7 @@
         }
 
         // Create new user in database
-        const signupResponse = await fetch(`${window.location.origin}/api/signup`, {
+        const signupResponse = await fetch(`${(window.APP_CONFIG?.apiUrl || window.location.origin).replace(/\/$/, '')}/api/signup`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, email, password: pwd })
@@ -637,7 +638,7 @@
       }
       
       try {
-        const response = await fetch(`${window.location.origin}/api/check-user`, {
+        const response = await fetch(`${(window.APP_CONFIG?.apiUrl || window.location.origin).replace(/\/$/, '')}/api/check-user`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email })
