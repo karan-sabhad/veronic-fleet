@@ -1,0 +1,8 @@
+DATABASE_URL=postgresql://postgres.<project-ref>:<password>@<pooler-host>:5432/postgres
+PORT=3001
+DB_POOL_MAX=10
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+NODE_ENV=production
+CORS_ORIGIN=https://veronic-fleet.vercel.app
