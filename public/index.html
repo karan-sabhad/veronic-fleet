@@ -2527,11 +2527,12 @@
     <div id="printBillArea" style="display:none;"></div>
     <div id="reportPrintArea" style="display:none;"></div>
 
+    <script src="/config.js"></script>
     <script>
         // ============================================================
         // AUTHENTICATION SYSTEM - Backend API Integration
         // ============================================================
-        const API_URL = `${window.location.origin}/api`;
+        const API_URL = `${(window.APP_CONFIG?.apiUrl || window.location.origin).replace(/\/$/, '')}/api`;
         const AUTH_KEY = 'veronic_auth_token';
         let currentUser = null;
 
