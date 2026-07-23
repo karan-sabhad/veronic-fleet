@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>SimpleFlow | Login & Signup</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <!-- Font Awesome 6 (free icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(145deg, #f5f7fe 0%, #eef2fa 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .card {
+      background: #ffffff;
+      max-width: 460px;
+      width: 100%;
+      border-radius: 2rem;
+      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02);
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #e9edf2;
+      background: #ffffff;
+    }
+
+    .tab-btn {
+      flex: 1;
+      text-align: center;
+      padding: 1.1rem 0;
+      font-weight: 600;
+      font-size: 1rem;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #8b9ab0;
+      transition: all 0.2s;
+      letter-spacing: -0.2px;
+    }
+
+    .tab-btn i {
+      margin-right: 8px;
+      font-size: 0.9rem;
+    }
+
+    .tab-btn.active {
+      color: #3b82f6;
+      border-bottom: 2.5px solid #3b82f6;
+      background: #ffffff;
+    }
+
+    .form-container {
+      padding: 2rem 1.8rem 2rem 1.8rem;
+    }
+
+    .form-heading {
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: #1a2634;
+      margin-bottom: 0.3rem;
+    }
+
+    .form-sub {
+      color: #6c7a91;
+      font-size: 0.85rem;
+      margin-bottom: 1.6rem;
+      border-left: 3px solid #3b82f6;
+      padding-left: 0.7rem;
+    }
+
+    .input-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .input-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #334155;
+      margin-bottom: 0.4rem;
+    }
+
+    .input-field {
+      display: flex;
+      align-items: center;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 1rem;
+      padding: 0.6rem 0.8rem;
+      transition: all 0.2s;
+    }
+
+    .input-field i {
+      color: #94a3b8;
+      font-size: 1rem;
+      width: 28px;
+    }
+
+    .input-field input {
+      border: none;
+      background: transparent;
+      width: 100%;
+      font-size: 0.9rem;
+      padding: 0.5rem 0;
+      outline: none;
+      color: #0f172a;
+      font-weight: 500;
+    }
+
+    .input-field input::placeholder {
+      color: #bbc4d2;
+      font-weight: 400;
+    }
+
+    .input-field:focus-within {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+      background: #ffffff;
+    }
+
+    .toggle-pwd {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      padding: 0 4px;
+    }
+
+    .toggle-pwd:hover {
+      color: #3b82f6;
+    }
+
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 1rem 0 1.4rem 0;
+      font-size: 0.8rem;
+    }
+
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #475569;
+    }
+
+    .remember input {
+      accent-color: #3b82f6;
+      width: 16px;
+      height: 16px;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .forgot-link, .switch-link {
+      color: #3b82f6;
+      text-decoration: none;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .forgot-link:hover, .switch-link:hover {
+      text-decoration: underline;
+    }
+
+    .action-btn {
+      background: #3b82f6;
+      border: none;
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 1.5rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 0.3rem;
+      box-shadow: 0 2px 6px rgba(59,130,246,0.2);
+    }
+
+    .action-btn:hover {
+      background: #2563eb;
+      transform: scale(0.98);
+      box-shadow: 0 4px 12px rgba(59,130,246,0.25);
+    }
+
+    .action-btn:active {
+      transform: scale(0.97);
+    }
+
+    .message-area {
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      padding: 0.5rem 0.8rem;
+      border-radius: 1rem;
+      text-align: center;
+      background: #f1f5f9;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .error-msg {
+      color: #dc2626;
+      background: #fef2f2;
+    }
+
+    .success-msg {
+      color: #16a34a;
+      background: #f0fdf4;
+    }
+
+    .info-msg {
+      color: #3b82f6;
+      background: #eff6ff;
+    }
+
+    .switch-prompt {
+      text-align: center;
+      margin-top: 1.2rem;
+      font-size: 0.8rem;
+      color: #5b6e8c;
+    }
+
+    .form-panel {
+      display: none;
+    }
+
+    .form-panel.active-panel {
+      display: block;
+    }
+
+    @media (max-width: 480px) {
+      .form-container {
+        padding: 1.5rem;
+      }
+      .tab-btn {
+        padding: 0.9rem 0;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="tabs">
+    <button class="tab-btn active" id="loginTabBtn"><i class="fas fa-sign-in-alt"></i> Login</button>
+    <button class="tab-btn" id="signupTabBtn"><i class="fas fa-user-plus"></i> Sign Up</button>
+  </div>
+
+  <div class="form-container">
+    <!-- LOGIN FORM PANEL -->
+    <div id="loginPanel" class="form-panel active-panel">
+      <div class="form-heading">Welcome back</div>
+      <div class="form-sub">Sign in to your account</div>
+
+      <form id="loginFormElement">
+        <div class="input-group">
+          <label class="input-label"><i class="far fa-envelope"></i> Email</label>
+          <div class="input-field">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label"><i class="fas fa-lock"></i> Password</label>
+          <div class="input-field">
+            <i class="fas fa-key"></i>
+            <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+            <button type="button" class="toggle-pwd" data-target="loginPassword"><i class="far fa-eye-slash"></i></button>
+          </div>
+        </div>
+
+        <div class="form-options">
+          <label class="remember">
+            <input type="checkbox" id="loginRemember"> Remember me
+          </label>
+          <a href="#" class="forgot-link" id="forgotPasswordLink">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="action-btn" id="loginSubmitBtn"><span>Sign In</span> <i class="fas fa-arrow-right"></i></button>
+      </form>
+      <div class="switch-prompt">
+        New here? <a href="#" class="switch-link" id="switchToSignupLink">Create an account</a>
+      </div>
+    </div>
+
+    <!-- SIGNUP FORM PANEL -->
+    <div id="signupPanel" class="form-panel">
+      <div class="form-heading">Create account</div>
+      <div class="form-sub">Join us in one click</div>
+
+      <form id="signupFormElement">
+        <div class="input-group">
+          <label class="input-label"><i class="fas fa-user"></i> Full name</label>
+          <div class="input-field">
+            <i class="fas fa-user-circle"></i>
+            <input type="text" id="signupName" placeholder="Alex Johnson" autocomplete="name">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label"><i class="far fa-envelope"></i> Email</label>
+          <div class="input-field">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="signupEmail" placeholder="hello@domain.com" autocomplete="email">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label"><i class="fas fa-lock"></i> Password</label>
+          <div class="input-field">
+            <i class="fas fa-key"></i>
+            <input type="password" id="signupPassword" placeholder="Create a strong password">
+            <button type="button" class="toggle-pwd" data-target="signupPassword"><i class="far fa-eye-slash"></i></button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label"><i class="fas fa-check-circle"></i> Confirm password</label>
+          <div class="input-field">
+            <i class="fas fa-shield-alt"></i>
+            <input type="password" id="signupConfirm" placeholder="Repeat your password">
+            <button type="button" class="toggle-pwd" data-target="signupConfirm"><i class="far fa-eye-slash"></i></button>
+          </div>
+        </div>
+
+        <button type="submit" class="action-btn" id="signupSubmitBtn"><span>Sign Up</span> <i class="fas fa-user-check"></i></button>
+      </form>
+      <div class="switch-prompt">
+        Already have an account? <a href="#" class="switch-link" id="switchToLoginLink">Sign in</a>
+      </div>
+    </div>
+
+    <div id="globalMessageArea" class="message-area info-msg">
+      <i class="fas fa-info-circle"></i> <span id="messageText">✨ Simple & secure access</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ==============================================
+
+    // ==============================================
+    // DOM Elements
+    // ==============================================
+    const loginTab = document.getElementById('loginTabBtn');
+    const signupTab = document.getElementById('signupTabBtn');
+    const loginPanel = document.getElementById('loginPanel');
+    const signupPanel = document.getElementById('signupPanel');
+    const switchToSignup = document.getElementById('switchToSignupLink');
+    const switchToLogin = document.getElementById('switchToLoginLink');
+    const forgotLink = document.getElementById('forgotPasswordLink');
+
+    // message handling
+    const messageDiv = document.getElementById('globalMessageArea');
+    let messageSpan = document.getElementById('messageText');
+
+    function showMessage(type, text) {
+      messageSpan.innerText = text;
+      messageDiv.classList.remove('error-msg', 'success-msg', 'info-msg');
+      if (type === 'error') {
+        messageDiv.classList.add('error-msg');
+        messageDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> <span>${text}</span>`;
+      } else if (type === 'success') {
+        messageDiv.classList.add('success-msg');
+        messageDiv.innerHTML = `<i class="fas fa-check-circle"></i> <span>${text}</span>`;
+      } else {
+        messageDiv.classList.add('info-msg');
+        messageDiv.innerHTML = `<i class="fas fa-info-circle"></i> <span>${text}</span>`;
+      }
+      messageSpan = messageDiv.querySelector('span');
+    }
+
+    function resetToDefault() {
+      if (!messageDiv.classList.contains('error-msg') && !messageDiv.classList.contains('success-msg')) return;
+      setTimeout(() => {
+        if (messageDiv && messageSpan) {
+          showMessage('info', '✨ Ready to go');
+        }
+      }, 3000);
+    }
+
+    // Helper to update panels and active tab
+    function setActivePanel(panel) {
+      if (panel === 'login') {
+        loginPanel.classList.add('active-panel');
+        signupPanel.classList.remove('active-panel');
+        loginTab.classList.add('active');
+        signupTab.classList.remove('active');
+        showMessage('info', 'Sign in with your credentials');
+      } else {
+        signupPanel.classList.add('active-panel');
+        loginPanel.classList.remove('active-panel');
+        signupTab.classList.add('active');
+        loginTab.classList.remove('active');
+        showMessage('info', 'Join us — fill the details');
+      }
+    }
+
+    // Toggle password visibility
+    function initPasswordToggles() {
+      const toggleButtons = document.querySelectorAll('.toggle-pwd');
+      toggleButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = btn.getAttribute('data-target');
+          const targetInput = document.getElementById(targetId);
+          if (targetInput) {
+            const type = targetInput.type === 'password' ? 'text' : 'password';
+            targetInput.type = type;
+            const icon = btn.querySelector('i');
+            if (type === 'text') {
+              icon.classList.remove('fa-eye-slash');
+              icon.classList.add('fa-eye');
+            } else {
+              icon.classList.remove('fa-eye');
+              icon.classList.add('fa-eye-slash');
+            }
+          }
+        });
+      });
+    }
+
+    function isValidEmail(email) {
+      const re = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+      return re.test(email.trim());
+    }
+
+    // ==============================================
+    // Login Handler - Uses backend API
+    // ==============================================
+    const loginForm = document.getElementById('loginFormElement');
+    const loginEmail = document.getElementById('loginEmail');
+    const loginPassword = document.getElementById('loginPassword');
+    const loginRemember = document.getElementById('loginRemember');
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = loginEmail.value.trim();
+      const password = loginPassword.value;
+
+      if (!email) {
+        showMessage('error', 'Please enter your email address');
+        return;
+      }
+      if (!isValidEmail(email)) {
+        showMessage('error', 'Enter a valid email (e.g., name@example.com)');
+        return;
+      }
+      if (!password) {
+        showMessage('error', 'Password cannot be empty');
+        return;
+      }
+      if (password.length < 3) {
+        showMessage('error', 'Password must be at least 3 characters');
+        return;
+      }
+
+      try {
+        // Validate user through the backend API
+        const response = await fetch(`${window.location.origin}/api/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const result = await response.json();
+        const user = result.success ? result.data.user : null;
+        if (user && result.data.token) localStorage.setItem('veronic_auth_token', result.data.token);
+
+        if (user) {
+          // Store session
+          sessionStorage.setItem('loggedInUser', JSON.stringify(user));
+          
+          if (loginRemember.checked) {
+            localStorage.setItem('rememberedLoginEmail', email);
+          } else {
+            localStorage.removeItem('rememberedLoginEmail');
+          }
+
+          showMessage('success', `🎉 Welcome back, ${user.name}!`);
+          
+          // Redirect to index.html after successful login
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 800);
+        } else {
+          // Check if user exists with this email
+          const existingResponse = await fetch(`${window.location.origin}/api/check-user`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+          });
+          const existingUser = (await existingResponse.json()).data?.exists;
+          if (existingUser) {
+            showMessage('error', 'Incorrect password. Please try again.');
+          } else {
+            showMessage('error', 'Account not found. Please sign up first.');
+          }
+          resetToDefault();
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        showMessage('error', 'Database error. Please try again.');
+      }
+    }
+
+    // ==============================================
+    // Signup Handler - Uses backend API
+    // ==============================================
+    const signupForm = document.getElementById('signupFormElement');
+    const signupName = document.getElementById('signupName');
+    const signupEmail = document.getElementById('signupEmail');
+    const signupPassword = document.getElementById('signupPassword');
+    const signupConfirm = document.getElementById('signupConfirm');
+
+    async function handleSignup(e) {
+      e.preventDefault();
+      const name = signupName.value.trim();
+      const email = signupEmail.value.trim();
+      const pwd = signupPassword.value;
+      const confirmPwd = signupConfirm.value;
+
+      if (!name) {
+        showMessage('error', 'Full name is required');
+        return;
+      }
+      if (!email) {
+        showMessage('error', 'Email address is required');
+        return;
+      }
+      if (!isValidEmail(email)) {
+        showMessage('error', 'Provide a valid email address');
+        return;
+      }
+      if (!pwd) {
+        showMessage('error', 'Create a password');
+        return;
+      }
+      if (pwd.length < 3) {
+        showMessage('error', 'Password must be at least 3 characters');
+        return;
+      }
+      if (pwd !== confirmPwd) {
+        showMessage('error', 'Passwords do not match');
+        return;
+      }
+
+      try {
+        // Check if user already exists in database
+        const existsResponse = await fetch(`${window.location.origin}/api/check-user`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const exists = (await existsResponse.json()).data?.exists;
+        if (exists) {
+          showMessage('error', 'Account already exists with this email. Please login.');
+          return;
+        }
+
+        // Create new user in database
+        const signupResponse = await fetch(`${window.location.origin}/api/signup`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password: pwd })
+        });
+        const signupResult = await signupResponse.json();
+        const newUser = signupResult.success ? signupResult.data.user : null;
+        if (newUser && signupResult.data.token) localStorage.setItem('veronic_auth_token', signupResult.data.token);
+        
+        if (newUser) {
+          showMessage('success', `🎉 Account created successfully! Welcome ${name}!`);
+          
+          // Auto-fill login email
+          setTimeout(() => {
+            setActivePanel('login');
+            loginEmail.value = email;
+            showMessage('success', 'Account ready! Enter your password to sign in.');
+          }, 1200);
+          
+          // Reset signup fields
+          signupName.value = '';
+          signupEmail.value = '';
+          signupPassword.value = '';
+          signupConfirm.value = '';
+        } else {
+          showMessage('error', 'Failed to create account. Please try again.');
+        }
+      } catch (error) {
+        console.error('Signup error:', error);
+        showMessage('error', 'Database error. Please try again.');
+      }
+      resetToDefault();
+    }
+
+    // ==============================================
+    // Forgot Password Handler
+    // ==============================================
+    async function handleForgot(e) {
+      e.preventDefault();
+      const email = loginEmail.value.trim();
+      if (!email) {
+        showMessage('error', 'Enter your email address to reset password');
+        return;
+      }
+      if (!isValidEmail(email)) {
+        showMessage('error', 'Provide a valid email for password reset');
+        return;
+      }
+      
+      try {
+        const response = await fetch(`${window.location.origin}/api/check-user`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const user = (await response.json()).data?.exists;
+        if (user) {
+          showMessage('success', `📧 Password reset link sent to ${email}`);
+          // In a real app, you would send an email with reset link
+        } else {
+          showMessage('error', 'No account found with this email address');
+        }
+      } catch (error) {
+        console.error('Forgot password error:', error);
+        showMessage('error', 'Database error. Please try again.');
+      }
+      resetToDefault();
+    }
+
+    // ==============================================
+    // Load remembered login on page load
+    // ==============================================
+    function loadRememberedLogin() {
+      const remembered = localStorage.getItem('rememberedLoginEmail');
+      if (remembered) {
+        loginEmail.value = remembered;
+        loginRemember.checked = true;
+        showMessage('info', 'Welcome back! Email prefilled.');
+      }
+    }
+
+    // ==============================================
+    // Check if user is already logged in
+    // ==============================================
+    function checkSession() {
+      const loggedInUser = sessionStorage.getItem('loggedInUser');
+      if (loggedInUser) {
+        try {
+          const user = JSON.parse(loggedInUser);
+          // User is logged in, redirect to dashboard
+          window.location.href = 'index.html';
+        } catch (e) {
+          sessionStorage.removeItem('loggedInUser');
+        }
+      }
+    }
+
+    // ==============================================
+    // Event Listeners
+    // ==============================================
+    loginForm.addEventListener('submit', handleLogin);
+    signupForm.addEventListener('submit', handleSignup);
+    forgotLink.addEventListener('click', handleForgot);
+
+    // Tab switching
+    loginTab.addEventListener('click', () => setActivePanel('login'));
+    signupTab.addEventListener('click', () => setActivePanel('signup'));
+    switchToSignup.addEventListener('click', (e) => { e.preventDefault(); setActivePanel('signup'); });
+    switchToLogin.addEventListener('click', (e) => { e.preventDefault(); setActivePanel('login'); });
+
+    // Initialize
+    initPasswordToggles();
+    loadRememberedLogin();
+    checkSession();
+    showMessage('info', '👋 Simple & clean — login or sign up');
+  })();
+</script>
+</body>
+</html>

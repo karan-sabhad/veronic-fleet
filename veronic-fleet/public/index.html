@@ -1,0 +1,3775 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>VERONIC | Premium Fleet Manager - Complete Solution</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* ----- RESET & BASE ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Poppins', 'Segoe UI', system-ui, sans-serif;
+            background: radial-gradient(circle at 10% 20%, #eef2fa 0%, #e0e8f2 100%);
+            color: #0a2a3b;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #eef2f8;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(145deg, #e67e22, #f39c12);
+            border-radius: 10px;
+        }
+
+        /* ----- GLASS NAV ----- */
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(16px);
+            border-radius: 80px;
+            margin: 20px 28px 28px 28px;
+            padding: 6px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(230, 126, 34, 0.15);
+            transition: all 0.3s ease;
+            flex-wrap: nowrap;
+            overflow: visible;
+            min-height: 64px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .nav-brand i {
+            font-size: 28px;
+            background: linear-gradient(145deg, #e67e22, #f39c12);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-brand h2 {
+            font-size: 1.4rem;
+            background: linear-gradient(130deg, #1f4e6e, #e67e22, #f39c12);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 6px;
+            flex-wrap: nowrap;
+            align-items: center;
+            overflow: visible;
+            padding: 4px 0;
+            position: relative;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #1f4e6e;
+            transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .nav-btn:hover {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(230, 126, 34, 0.3);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+            box-shadow: 0 4px 12px rgba(230, 126, 34, 0.35);
+        }
+
+        .nav-btn-primary {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+            box-shadow: 0 4px 10px rgba(230, 126, 34, 0.25);
+        }
+
+        .nav-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.4);
+        }
+
+        .nav-reports-wrapper {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .reports-dropdown-menu {
+            position: absolute;
+            top: 115%;
+            right: 0;
+            background: white;
+            min-width: 210px;
+            border-radius: 32px;
+            box-shadow: 0 28px 50px -12px rgba(0, 0, 0, 0.25);
+            display: none;
+            flex-direction: column;
+            z-index: 300;
+            overflow: hidden;
+            border: 1px solid rgba(230, 126, 34, 0.2);
+            backdrop-filter: blur(8px);
+        }
+
+        .reports-dropdown-menu.show {
+            display: flex;
+        }
+
+        .dropdown-item {
+            padding: 12px 20px;
+            background: white;
+            border: none;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.2s;
+            color: #1e3a4d;
+        }
+
+        .dropdown-item:hover {
+            background: #fff3e8;
+            color: #e67e22;
+            padding-left: 28px;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: linear-gradient(135deg, #1f4e6e, #0e3a52);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .mobile-menu-btn:hover {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+        }
+
+        @media (max-width: 1200px) {
+            .nav-links {
+                gap: 4px;
+            }
+
+            .nav-btn {
+                padding: 6px 10px;
+                font-size: 0.7rem;
+            }
+
+            .nav-brand h2 {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .glass-nav {
+                margin: 16px 16px 20px 16px;
+                padding: 6px 14px;
+                border-radius: 60px;
+            }
+
+            .nav-brand h2 {
+                font-size: 1rem;
+            }
+
+            .nav-brand i {
+                font-size: 22px;
+            }
+        }
+
+        /* ----- SIDEBAR ----- */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -320px;
+            width: 320px;
+            height: 100%;
+            background: linear-gradient(170deg, #0a2c38 0%, #031016 100%);
+            backdrop-filter: blur(12px);
+            color: #f8fafc;
+            z-index: 1000;
+            transition: left 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+            box-shadow: 20px 0 50px rgba(0, 0, 0, 0.5);
+            overflow-y: auto;
+            padding: 32px 0;
+            border-right: 1px solid rgba(255, 200, 120, 0.25);
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding: 0 26px 24px 26px;
+            border-bottom: 1px solid rgba(255, 210, 130, 0.3);
+            margin-bottom: 28px;
+        }
+
+        .sidebar-header h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFE6B0, #FFB347, #ff9a2e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .sidebar-header p {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            letter-spacing: 2px;
+            margin-top: 6px;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 0 22px;
+        }
+
+        .side-link {
+            background: rgba(255, 255, 255, 0.04);
+            border: none;
+            padding: 13px 20px;
+            border-radius: 60px;
+            color: #f1f5fe;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+            text-align: left;
+            text-decoration: none;
+        }
+
+        .side-link:hover {
+            background: linear-gradient(95deg, #e67e22, #f39c12);
+            transform: translateX(10px);
+            color: white;
+        }
+
+        .primary-side {
+            background: linear-gradient(95deg, #e67e22, #f39c12);
+            color: white;
+        }
+
+        .reports-side-section {
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            padding-top: 20px;
+        }
+
+        .reports-title {
+            font-size: 0.7rem;
+            letter-spacing: 2.5px;
+            padding: 8px 16px;
+            color: #ffcd94;
+            font-weight: 700;
+        }
+
+        .report-side-link {
+            padding-left: 48px !important;
+            font-size: 0.8rem;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            z-index: 999;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.3s ease;
+        }
+
+        .overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* ----- MAIN CONTENT ----- */
+        .main-content {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 20px 28px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 26px;
+            margin-bottom: 42px;
+        }
+
+        .stat-card {
+            border-radius: 42px;
+            padding: 28px 20px;
+            text-align: center;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.25);
+            transition: all 0.35s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:nth-child(1) {
+            background: linear-gradient(145deg, #1e3c72, #2a5298);
+            border-bottom: 5px solid #60a5fa;
+        }
+
+        .stat-card:nth-child(2) {
+            background: linear-gradient(145deg, #0f5c3f, #2c7a5e);
+            border-bottom: 5px solid #4ade80;
+        }
+
+        .stat-card:nth-child(3) {
+            background: linear-gradient(145deg, #b45309, #f59e0b);
+            border-bottom: 5px solid #fbbf24;
+        }
+
+        .stat-card:nth-child(4) {
+            background: linear-gradient(145deg, #6b21a5, #9333ea);
+            border-bottom: 5px solid #c084fc;
+        }
+
+        .stat-card h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: rgba(255, 255, 240, 0.95);
+        }
+
+        .stat-number {
+            font-size: 2.9rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .graphs-row {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            margin-bottom: 42px;
+        }
+
+        .graph-card {
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 42px;
+            padding: 28px;
+            box-shadow: 0 18px 36px rgba(0, 0, 0, 0.06);
+            transition: 0.3s;
+        }
+
+        .graph-card h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 22px;
+            color: #1a4e6e;
+            border-left: 7px solid #e67e22;
+            padding-left: 18px;
+        }
+
+        canvas {
+            max-height: 240px;
+            width: 100%;
+        }
+
+        .data-panel,
+        .driver-management-panel {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 42px;
+            padding: 30px;
+            margin-bottom: 32px;
+            border: 1px solid rgba(230, 126, 34, 0.15);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .panel-header h2 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #1e3b2f;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 28px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 16px 14px;
+            background: #fef3e8;
+            color: #1e5a7d;
+            font-weight: 800;
+        }
+
+        td {
+            padding: 14px 14px;
+            border-bottom: 1px solid #f0e2d4;
+        }
+
+        tr:hover td {
+            background: #fff7ed;
+        }
+
+        .badge {
+            background: linear-gradient(135deg, #eaf9ed, #d1fae5);
+            padding: 5px 18px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 0.7rem;
+            color: #15803d;
+        }
+
+        .badge-warning {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+        }
+
+        .badge-danger {
+            background: linear-gradient(135deg, #fee2e2, #fca5a5);
+            color: #991b1b;
+        }
+
+        .badge-success {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: #065f46;
+        }
+
+        .refresh-btn {
+            background: #f1f5f9;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 60px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+
+        .refresh-btn:hover {
+            background: #e67e22;
+            color: white;
+        }
+
+        .action-bill-delete,
+        .action-bill-edit,
+        .edit-driver-btn,
+        .delete-driver-btn,
+        .edit-bus-btn,
+        .delete-bus-btn,
+        .print-bill-btn {
+            border: none;
+            padding: 7px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .action-bill-delete,
+        .delete-driver-btn,
+        .delete-bus-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .action-bill-delete:hover,
+        .delete-driver-btn:hover,
+        .delete-bus-btn:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            transform: translateY(-1px);
+        }
+
+        .action-bill-edit,
+        .edit-driver-btn,
+        .edit-bus-btn {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+        }
+
+        .action-bill-edit:hover,
+        .edit-driver-btn:hover,
+        .edit-bus-btn:hover {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            transform: translateY(-1px);
+        }
+
+        .print-bill-btn {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+        }
+
+        .print-bill-btn:hover {
+            background: linear-gradient(135deg, #16a34a, #15803d);
+            transform: translateY(-1px);
+        }
+
+        .action-buttons-cell {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .add-driver-btn {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+
+        .add-driver-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(230, 126, 34, 0.3);
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 360px;
+            margin-bottom: 28px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 24px 14px 52px;
+            border-radius: 60px;
+            border: 1.5px solid #e2e8f0;
+            outline: none;
+        }
+
+        .bill-container {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 52px;
+            padding: 42px 44px;
+            margin-bottom: 32px;
+            border: 1px solid rgba(230, 126, 34, 0.25);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-title h1 {
+            font-size: 2.3rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 38px;
+            background: linear-gradient(135deg, #1e5a7d, #e67e22, #f39c12);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-field label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: #546e7a;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .form-field label i {
+            color: #e67e22;
+            font-size: 0.85rem;
+        }
+
+        .form-field input,
+        .form-field select {
+            padding: 14px 20px;
+            border-radius: 24px;
+            border: 1.5px solid #e2edf2;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.3s ease;
+            background: #ffffff;
+        }
+
+        .form-field input:focus,
+        .form-field select:focus {
+            border-color: #e67e22;
+            box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
+        }
+
+        .readonly-bill {
+            background: linear-gradient(135deg, #fef7ec, #fff3e6);
+            font-weight: 800;
+            color: #e67e22;
+            border-color: #ffe0b3;
+        }
+
+        .trip-section {
+            margin: 38px 0 28px;
+            background: #fefcf8;
+            border-radius: 32px;
+            padding: 20px 24px;
+            border: 1px solid rgba(230, 126, 34, 0.1);
+        }
+
+        .trip-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #1e5a7d;
+            margin-bottom: 22px;
+            border-bottom: 3px solid #e67e22;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 8px;
+        }
+
+        .trip-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .trip-table th,
+        .trip-table td {
+            border: 1px solid #e9ecef;
+            padding: 12px 10px;
+            font-size: 0.8rem;
+        }
+
+        .trip-table th {
+            background: #fff8f0;
+            color: #1e5a7d;
+            font-weight: 800;
+        }
+
+        .trip-table input {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            transition: 0.2s;
+        }
+
+        .trip-table input:focus {
+            border-color: #e67e22;
+            outline: none;
+        }
+
+        .add-row-btn {
+            margin-top: 24px;
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            border: none;
+            padding: 12px 28px;
+            border-radius: 60px;
+            cursor: pointer;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        .add-row-btn:hover {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .remove-row-btn {
+            background: #fee2e2;
+            border: none;
+            border-radius: 40px;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            color: #dc2626;
+            transition: 0.2s;
+        }
+
+        .remove-row-btn:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        .amount-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 28px;
+            margin: 32px 0 36px;
+            padding: 28px 32px;
+            background: linear-gradient(125deg, #f8fafc, #fef9f0);
+            border-radius: 42px;
+            border: 1px solid rgba(230, 126, 34, 0.2);
+        }
+
+        .amount-field {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .amount-field label {
+            font-weight: 800;
+            color: #1e5a7d;
+            background: rgba(255, 255, 240, 0.8);
+            padding: 8px 20px;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .amount-field input {
+            font-size: 1.2rem;
+            font-weight: 800;
+            padding: 14px 24px;
+            border-radius: 40px;
+            border: 2px solid #e2e8f0;
+            width: 60%;
+            text-align: right;
+            background: white;
+            transition: 0.2s;
+        }
+
+        .amount-field input:focus {
+            border-color: #e67e22;
+            outline: none;
+        }
+
+        .save-bill-btn {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+            border: none;
+            padding: 18px 42px;
+            border-radius: 80px;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.3);
+        }
+
+        .save-bill-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(230, 126, 34, 0.4);
+        }
+
+        .report-card {
+            max-width: 1250px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 48px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+        }
+
+        .report-header {
+            background: linear-gradient(145deg, #fef9f0, #fff);
+            padding: 36px;
+            text-align: center;
+            border-bottom: 3px solid #f0e2d0;
+        }
+
+        .report-header h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .report-form {
+            padding: 36px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            border: none;
+            width: 100%;
+            padding: 18px;
+            border-radius: 80px;
+            font-weight: 800;
+            color: white;
+            cursor: pointer;
+        }
+
+        .city-badge,
+        .bill-badge {
+            background: linear-gradient(135deg, #fff0e0, #ffe8d9);
+            padding: 5px 18px;
+            border-radius: 60px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #e67e22;
+        }
+
+        .toast-msg {
+            position: fixed;
+            bottom: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #1f4e6e, #0e3a52);
+            color: white;
+            padding: 14px 34px;
+            border-radius: 80px;
+            z-index: 1200;
+            animation: fadeInOut 2.6s ease;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(25px);
+            }
+
+            15% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+
+            85% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        .page-indicator {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            display: inline-block;
+            margin-bottom: 32px;
+        }
+
+        .hidden-view {
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            margin-top: 42px;
+            color: #5e7a93;
+            padding: 28px;
+        }
+
+        @media (min-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .graphs-row {
+                flex-direction: row;
+            }
+
+            .graph-card {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .bill-container {
+                padding: 24px 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .amount-row {
+                grid-template-columns: 1fr;
+            }
+
+            .amount-field input {
+                width: 100%;
+            }
+        }
+
+        .month-selector {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .month-selector select,
+        .month-selector button {
+            padding: 12px 24px;
+            border-radius: 60px;
+            border: 1px solid #e2e8f0;
+            font-weight: 600;
+        }
+
+        .grand-total-row {
+            background: #f97316 !important;
+            color: white;
+            font-weight: 800;
+        }
+
+        .grand-total-row td {
+            color: white;
+            font-weight: 800;
+        }
+
+        .report-print-popup-overlay,
+        .print-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 6000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .report-print-popup-overlay.active,
+        .print-popup-overlay.active {
+            display: flex;
+        }
+
+        .report-print-popup-content,
+        .print-popup-content {
+            background: white;
+            max-width: 1100px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 32px;
+            padding: 30px;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+            position: relative;
+            animation: popIn 0.3s ease;
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .report-print-popup-header,
+        .print-popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e67e22;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .report-print-popup-header h2,
+        .print-popup-header h2 {
+            font-size: 1.5rem;
+            color: #1e5a7d;
+            font-weight: 800;
+        }
+
+        .report-print-popup-header h2 i,
+        .print-popup-header h2 i {
+            color: #e67e22;
+            margin-right: 10px;
+        }
+
+        .report-print-popup-body,
+        .print-popup-body {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .report-print-popup-footer,
+        .print-popup-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+        }
+
+        .report-print-popup-footer button,
+        .print-popup-footer button {
+            padding: 12px 32px;
+            border-radius: 60px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .btn-cancel {
+            background: #e2e8f0;
+            color: #1e3a4d;
+        }
+
+        .btn-cancel:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-print {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+        }
+
+        .btn-print:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(230, 126, 34, 0.4);
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            box-shadow: 0 4px 15px rgba(30, 60, 114, 0.3);
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 60, 114, 0.4);
+        }
+
+        /* TODAY DRIVER */
+        .today-driver-container {
+            background: white;
+            border-radius: 42px;
+            padding: 30px;
+            box-shadow: 0 18px 36px rgba(0, 0, 0, 0.06);
+        }
+
+        .today-driver-form {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 24px;
+        }
+
+        .today-driver-form .form-group {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .today-driver-form label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #546e7a;
+            display: block;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .today-driver-form select {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            border: 1.5px solid #e2edf2;
+            font-size: 0.9rem;
+            background: white;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .today-driver-form select:focus {
+            border-color: #e67e22;
+            box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
+        }
+
+        .today-driver-form .add-btn {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 100px;
+            font-size: 0.95rem;
+        }
+
+        .today-driver-form .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(230, 126, 34, 0.3);
+        }
+
+        .today-driver-table {
+            margin-top: 10px;
+        }
+
+        .today-driver-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .today-driver-table th {
+            text-align: left;
+            padding: 14px 16px;
+            background: #fef3e8;
+            color: #1e5a7d;
+            font-weight: 800;
+            font-size: 0.8rem;
+        }
+
+        .today-driver-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f0e2d4;
+            font-size: 0.85rem;
+        }
+
+        .today-driver-table tr:hover td {
+            background: #fff7ed;
+        }
+
+        .delete-today-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border: none;
+            padding: 6px 18px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .delete-today-btn:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            transform: translateY(-1px);
+        }
+
+        /* TODAY DRIVER DASHBOARD CARD */
+        .today-driver-dashboard-card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 42px;
+            padding: 30px;
+            margin-bottom: 32px;
+            border: 1px solid rgba(230, 126, 34, 0.15);
+        }
+
+        .today-driver-dashboard-card .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .today-driver-dashboard-card .panel-header h2 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #1e3b2f;
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 700px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border-radius: 48px;
+            padding: 28px 32px;
+            box-shadow: 0 40px 70px rgba(0, 0, 0, 0.4);
+            transform: scale(0.95);
+            transition: transform 0.2s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-content h3 {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            color: #e67e22;
+            font-weight: 800;
+            border-left: 6px solid #e67e22;
+            padding-left: 18px;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 28px;
+            position: sticky;
+            bottom: 0;
+            background: white;
+            padding-top: 16px;
+            border-top: 1px solid #f0e2d4;
+        }
+
+        .modal-buttons button {
+            padding: 12px 28px;
+            border-radius: 60px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .modal-save {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+        }
+
+        .modal-cancel {
+            background: #e2e8f0;
+            color: #1e3a4d;
+        }
+
+        .modal-content .form-field {
+            margin-bottom: 18px;
+        }
+
+        .edit-items-container {
+            margin: 20px 0;
+            max-height: 45vh;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .edit-trip-card {
+            background: #fefaf5;
+            border-radius: 24px;
+            padding: 18px;
+            margin-bottom: 20px;
+            border: 1px solid #ffe0b3;
+        }
+
+        /* PRINT BILL CARD */
+        .print-bill-card {
+            font-family: 'Arial', 'Gujarati', 'Noto Sans Gujarati', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .print-bill-card .print-header {
+            text-align: center;
+            border-bottom: 3px double #c0392b;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+
+        .print-bill-card .print-header h1 {
+            color: #c0392b;
+            font-size: 22px;
+            margin-bottom: 4px;
+            letter-spacing: 2px;
+        }
+
+        .print-bill-card .print-header p {
+            margin: 4px 0;
+            font-size: 12px;
+        }
+
+        .print-bill-card .print-details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 20px;
+            background: #fef9f0;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #f0e2d4;
+            font-size: 12px;
+        }
+
+        .print-bill-card .print-details-grid div {
+            padding: 2px 0;
+        }
+
+        .print-bill-card .print-details-grid strong {
+            color: #1e5a7d;
+        }
+
+        .print-bill-card .print-items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+
+        .print-bill-card .print-items-table th {
+            background: #fef3e8;
+            padding: 6px 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-weight: bold;
+            color: #1e5a7d;
+        }
+
+        .print-bill-card .print-items-table td {
+            padding: 6px 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .print-bill-card .print-items-table .total-row {
+            background: #fff0e0;
+            font-weight: bold;
+        }
+
+        .print-bill-card .print-footer {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 2px dashed #e67e22;
+            font-size: 10px;
+            line-height: 1.6;
+        }
+
+        .print-bill-card .print-footer p {
+            margin: 4px 0;
+        }
+
+        .print-bill-card .print-signature {
+            margin-top: 12px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            padding-top: 8px;
+        }
+
+        .print-bill-card .print-signature div {
+            text-align: center;
+        }
+
+        .print-bill-card .print-signature .sign-line {
+            margin-top: 20px;
+            border-top: 1px solid #333;
+            width: 120px;
+            padding-top: 4px;
+        }
+
+        .print-bill-card .print-thankyou {
+            text-align: center;
+            margin-top: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #c0392b;
+        }
+
+        .report-print-card {
+            font-family: 'Arial', 'Gujarati', 'Noto Sans Gujarati', sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .report-print-card .report-print-header {
+            text-align: center;
+            border-bottom: 3px double #c0392b;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .report-print-card .report-print-header h1 {
+            color: #c0392b;
+            font-size: 24px;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+
+        .report-print-card .report-print-header p {
+            margin: 4px 0;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .report-print-card .report-print-header .report-date {
+            font-size: 12px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .report-print-card .report-print-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 12px;
+        }
+
+        .report-print-card .report-print-table th {
+            background: #fef3e8;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-weight: bold;
+            color: #1e5a7d;
+        }
+
+        .report-print-card .report-print-table td {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .report-print-card .report-print-table .total-row {
+            background: #f97316 !important;
+            font-weight: bold;
+            color: white;
+        }
+
+        .report-print-card .report-print-table .total-row td {
+            color: white;
+            font-weight: bold;
+        }
+
+        .report-print-card .report-print-footer {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 2px dashed #e67e22;
+            font-size: 10px;
+            line-height: 1.6;
+            text-align: center;
+            color: #666;
+        }
+
+        /* AUTH */
+        .auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(16px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-overlay.hidden {
+            display: none;
+        }
+
+        .auth-container {
+            background: white;
+            border-radius: 48px;
+            max-width: 480px;
+            width: 92%;
+            padding: 40px 36px;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
+            animation: popIn 0.35s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .auth-container .auth-logo {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .auth-container .auth-logo i {
+            font-size: 48px;
+            background: linear-gradient(145deg, #e67e22, #f39c12);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .auth-container .auth-logo h2 {
+            font-size: 1.8rem;
+            background: linear-gradient(130deg, #1f4e6e, #e67e22, #f39c12);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+
+        .auth-container .auth-logo p {
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        .auth-container .form-group {
+            margin-bottom: 18px;
+        }
+
+        .auth-container .form-group label {
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: #1f4e6e;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .auth-container .form-group input {
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 24px;
+            border: 1.5px solid #e2edf2;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .auth-container .form-group input:focus {
+            border-color: #e67e22;
+            box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.12);
+        }
+
+        .auth-container .auth-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 60px;
+            font-weight: 800;
+            font-size: 1rem;
+            color: white;
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 6px 20px rgba(230, 126, 34, 0.3);
+        }
+
+        .auth-container .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(230, 126, 34, 0.4);
+        }
+
+        .auth-container .auth-toggle {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .auth-container .auth-toggle span {
+            color: #e67e22;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .auth-container .auth-toggle span:hover {
+            text-decoration: underline;
+        }
+
+        .auth-container .auth-error {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 12px 18px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .auth-container .auth-error.show {
+            display: block;
+        }
+
+        .auth-container .auth-success {
+            background: #dcfce7;
+            color: #15803d;
+            padding: 12px 18px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .auth-container .auth-success.show {
+            display: block;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 50px;
+        }
+
+        .password-wrapper .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #94a3b8;
+        }
+
+        .password-wrapper .toggle-password:hover {
+            color: #e67e22;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* USER AVATAR */
+        .user-avatar-wrapper {
+            position: relative;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(230, 126, 34, 0.3);
+            text-transform: uppercase;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            flex-shrink: 0;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.4);
+        }
+
+        .avatar-dropdown {
+            position: absolute;
+            top: 110%;
+            right: 0;
+            background: white;
+            min-width: 200px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            z-index: 500;
+            overflow: hidden;
+            border: 1px solid rgba(230, 126, 34, 0.15);
+            padding: 8px 0;
+        }
+
+        .avatar-dropdown.show {
+            display: flex;
+        }
+
+        .avatar-dropdown .dropdown-user-info {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f0e2d4;
+            margin-bottom: 4px;
+        }
+
+        .avatar-dropdown .dropdown-user-info .user-fullname {
+            font-weight: 700;
+            color: #1f4e6e;
+            font-size: 0.9rem;
+        }
+
+        .avatar-dropdown .dropdown-user-info .user-email {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .avatar-dropdown .dropdown-item-avatar {
+            padding: 10px 16px;
+            background: white;
+            border: none;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.2s;
+            color: #1e3a4d;
+            width: 100%;
+        }
+
+        .avatar-dropdown .dropdown-item-avatar:hover {
+            background: #fff3e8;
+            color: #e67e22;
+        }
+
+        .avatar-dropdown .dropdown-item-avatar.danger {
+            color: #dc2626;
+        }
+
+        .avatar-dropdown .dropdown-item-avatar.danger:hover {
+            background: #fee2e2;
+        }
+
+        @media (max-width: 768px) {
+            .user-avatar {
+                width: 28px;
+                height: 28px;
+                font-size: 0.7rem;
+            }
+
+            .avatar-dropdown {
+                min-width: 160px;
+            }
+        }
+
+        /* PRINT HIDE */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #reportPrintArea,
+            #reportPrintArea * {
+                visibility: visible;
+            }
+
+            #reportPrintArea {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                padding: 20px;
+                background: white;
+                z-index: 99999;
+                display: block !important;
+            }
+
+            .report-print-card {
+                max-width: 100% !important;
+                padding: 15px !important;
+                font-size: 11px !important;
+            }
+
+            .report-print-card .report-print-header h1 {
+                font-size: 18px !important;
+            }
+
+            .report-print-card .report-print-table {
+                font-size: 10px !important;
+            }
+
+            .report-print-card .report-print-footer {
+                font-size: 9px !important;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #printBillArea,
+            #printBillArea * {
+                visibility: visible;
+            }
+
+            #printBillArea {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                padding: 30px;
+                background: white;
+                z-index: 99999;
+                display: block !important;
+            }
+
+            .print-bill-card {
+                max-width: 100% !important;
+                padding: 15px !important;
+                margin: 0 auto !important;
+                font-size: 12px !important;
+            }
+
+            .print-bill-card .print-header h1 {
+                font-size: 20px !important;
+            }
+
+            .print-bill-card .print-details-grid {
+                font-size: 11px !important;
+                padding: 8px 12px !important;
+            }
+
+            .print-bill-card .print-items-table {
+                font-size: 11px !important;
+            }
+
+            .print-bill-card .print-footer {
+                font-size: 9px !important;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        /* Loading spinner for dropdowns */
+        .loading-option {
+            color: #94a3b8;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ========== AUTH OVERLAY ========== -->
+    <div class="auth-overlay" id="authOverlay">
+        <div class="auth-container" id="authContainer">
+            <div id="loginForm">
+                <div class="auth-logo"><i class="fas fa-bus-alt"></i>
+                    <h2>VERONIC TRAVELS</h2>
+                    <p>Premium Fleet Management</p>
+                </div>
+                <div class="auth-error" id="loginError"></div>
+                <div class="auth-success" id="loginSuccess"></div>
+                <div class="form-group"><label><i class="fas fa-envelope"></i> Email</label><input type="email"
+                        id="loginEmail" placeholder="Enter your email" value="admin@veronic.com"></div>
+                <div class="form-group"><label><i class="fas fa-lock"></i> Password</label>
+                    <div class="password-wrapper"><input type="password" id="loginPassword"
+                            placeholder="Enter your password" value="admin123"><i class="fas fa-eye toggle-password"
+                            onclick="togglePassword('loginPassword', this)"></i></div>
+                </div>
+                <button class="auth-btn" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+                <div class="auth-toggle">Don't have an account? <span id="showSignup">Sign Up</span></div>
+            </div>
+            <div id="signupForm" style="display:none;">
+                <div class="auth-logo"><i class="fas fa-bus-alt"></i>
+                    <h2>VERONIC TRAVELS</h2>
+                    <p>Create Your Account</p>
+                </div>
+                <div class="auth-error" id="signupError"></div>
+                <div class="auth-success" id="signupSuccess"></div>
+                <div class="form-group"><label><i class="fas fa-user"></i> Full Name</label><input type="text"
+                        id="signupName" placeholder="Enter your full name"></div>
+                <div class="form-group"><label><i class="fas fa-envelope"></i> Email</label><input type="email"
+                        id="signupEmail" placeholder="Enter your email"></div>
+                <div class="form-group"><label><i class="fas fa-lock"></i> Password</label>
+                    <div class="password-wrapper"><input type="password" id="signupPassword"
+                            placeholder="Min 3 characters"><i class="fas fa-eye toggle-password"
+                            onclick="togglePassword('signupPassword', this)"></i></div>
+                </div>
+                <div class="form-group"><label><i class="fas fa-check-circle"></i> Confirm Password</label>
+                    <div class="password-wrapper"><input type="password" id="signupConfirm"
+                            placeholder="Confirm your password"><i class="fas fa-eye toggle-password"
+                            onclick="togglePassword('signupConfirm', this)"></i></div>
+                </div>
+                <button class="auth-btn" id="signupBtn"><i class="fas fa-user-plus"></i> Create Account</button>
+                <div class="auth-toggle">Already have an account? <span id="showLogin">Sign In</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="fas fa-chariot"></i> Pramukhraj</h3>
+            <p>Travels • Premium Fleet</p>
+        </div>
+        <div class="sidebar-nav">
+            <a href="#" class="side-link" data-nav="dashboard"><i class="fas fa-tachometer-alt"></i> HOME</a>
+            <a href="#" class="side-link" data-nav="drivers"><i class="fas fa-id-card"></i> DRIVER NAME</a>
+            <a href="#" class="side-link" data-nav="buses"><i class="fas fa-bus"></i> BUS NO</a>
+            <a href="#" class="side-link" data-nav="todayDriver"><i class="fas fa-user-clock"></i> TODAY DRIVER</a>
+            <a href="#" class="side-link primary-side" id="addBillQuick"><i class="fas fa-plus-circle"></i> ADD BILL</a>
+            <a href="#" class="side-link" data-nav="viewBills"><i class="fas fa-receipt"></i> VIEW BILL</a>
+            <div class="reports-side-section">
+                <div class="reports-title"><i class="fas fa-chart-pie"></i> ADVANCED REPORTS</div>
+                <a href="#" class="side-link report-side-link" data-action="dateReport"><i
+                        class="fas fa-calendar-alt"></i> DATE REPORT</a>
+                <a href="#" class="side-link report-side-link" data-action="monthReport"><i
+                        class="fas fa-chart-line"></i> MONTH REPORT</a>
+            </div>
+            <div class="reports-side-section" style="border-top-color:rgba(230,126,34,0.3);">
+                <div class="reports-title"><i class="fas fa-user-circle"></i> ACCOUNT</div>
+                <a href="#" class="side-link report-side-link" id="sidebarLogout"><i class="fas fa-sign-out-alt"></i>
+                    LOGOUT</a>
+            </div>
+        </div>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <div id="globalModal" class="modal-overlay">
+        <div class="modal-content" id="modalContentDynamic"></div>
+    </div>
+
+    <!-- PRINT POPUP -->
+    <div class="print-popup-overlay" id="printPopup">
+        <div class="print-popup-content">
+            <div class="print-popup-header">
+                <h2><i class="fas fa-file-invoice"></i> Bill Preview</h2><span
+                    style="font-size:0.85rem; color:#64748b;">Review bill before printing</span>
+            </div>
+            <div class="print-popup-body" id="printPopupBody"></div>
+            <div class="print-popup-footer"><button class="btn-cancel" id="printPopupCancel"><i
+                        class="fas fa-times"></i> Cancel</button><button class="btn-print" id="printPopupPrint"><i
+                        class="fas fa-print"></i> Print</button></div>
+        </div>
+    </div>
+
+    <!-- REPORT PRINT POPUP -->
+    <div class="report-print-popup-overlay" id="reportPrintPopup">
+        <div class="report-print-popup-content">
+            <div class="report-print-popup-header">
+                <h2><i class="fas fa-chart-bar"></i> Report Preview</h2><span
+                    style="font-size:0.85rem; color:#64748b;">Review report before printing</span>
+            </div>
+            <div class="report-print-popup-body" id="reportPrintPopupBody"></div>
+            <div class="report-print-popup-footer"><button class="btn-cancel" id="reportPrintPopupCancel"><i
+                        class="fas fa-times"></i> Cancel</button><button class="btn-download" id="reportDownloadBtn"><i
+                        class="fas fa-download"></i> Download</button><button class="btn-print"
+                    id="reportPrintPopupPrint"><i class="fas fa-print"></i> Print</button></div>
+        </div>
+    </div>
+
+    <div class="main-content" id="mainContent">
+        <!-- GLASS NAV -->
+        <div class="glass-nav">
+            <div class="nav-brand"><i class="fas fa-bus-alt"></i>
+                <h2>VERONIC TRAVELS</h2>
+            </div>
+            <div class="nav-links">
+                <button class="nav-btn" data-nav="dashboard"><i class="fas fa-home"></i> HOME</button>
+                <button class="nav-btn" data-nav="drivers"><i class="fas fa-id-card"></i> DRIVER NAME</button>
+                <button class="nav-btn" data-nav="buses"><i class="fas fa-bus"></i> BUS NO</button>
+                <button class="nav-btn" data-nav="todayDriver"><i class="fas fa-user-clock"></i> TODAY DRIVER</button>
+                <button class="nav-btn nav-btn-primary" id="addBillQuickNav"><i class="fas fa-plus-circle"></i> ADD
+                    BILL</button>
+                <button class="nav-btn" data-nav="viewBills"><i class="fas fa-eye"></i> VIEW BILL</button>
+                <div class="nav-reports-wrapper">
+                    <button class="nav-btn" id="reportsDropdownBtn"><i class="fas fa-chart-simple"></i> REPORTS
+                        ▼</button>
+                    <div class="reports-dropdown-menu" id="reportsDropdown">
+                        <button class="dropdown-item" data-action="dateReport"><i class="fas fa-calendar-day"></i> 📅
+                            Date Report</button>
+                        <button class="dropdown-item" data-action="monthReport"><i class="fas fa-chart-line"></i> 📈
+                            Month Report</button>
+                    </div>
+                </div>
+                <div class="user-avatar-wrapper" id="userAvatarWrapper" style="display:none;">
+                    <div class="user-avatar" id="userAvatar" title="Click for profile"></div>
+                    <div class="avatar-dropdown" id="avatarDropdown">
+                        <div class="dropdown-user-info">
+                            <div class="user-fullname" id="avatarFullName">User Name</div>
+                            <div class="user-email" id="avatarEmail">user@email.com</div>
+                        </div>
+                        <button class="dropdown-item-avatar" id="avatarLogoutBtn"><i class="fas fa-sign-out-alt"></i>
+                            Logout</button>
+                    </div>
+                </div>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i> Menu</button>
+        </div>
+
+        <!-- DASHBOARD -->
+        <div id="dashboardView" class="hidden-view">
+            <div class="page-indicator"><i class="fas fa-chart-line"></i> Dashboard Overview</div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4><i class="fas fa-users"></i> TOTAL DRIVERS</h4>
+                    <div class="stat-number" id="statDrivers">0</div>
+                </div>
+                <div class="stat-card">
+                    <h4><i class="fas fa-file-invoice"></i> TODAY BILLS</h4>
+                    <div class="stat-number" id="statTodayBills">0</div>
+                </div>
+                <div class="stat-card">
+                    <h4><i class="fas fa-coins"></i> MONTH REVENUE</h4>
+                    <div class="stat-number" id="statMonthRev">₹0</div>
+                </div>
+                <div class="stat-card">
+                    <h4><i class="fas fa-bus-simple"></i> ACTIVE BUSES</h4>
+                    <div class="stat-number" id="statActiveBuses">0</div>
+                </div>
+            </div>
+            <div class="graphs-row">
+                <div class="graph-card">
+                    <h3><i class="fas fa-chart-line"></i> Weekly Earnings Trend</h3><canvas id="weeklyChart"
+                        height="160"></canvas>
+                </div>
+                <div class="graph-card">
+                    <h3><i class="fas fa-chart-pie"></i> City-wise Revenue</h3><canvas id="cityPieChart"
+                        height="160"></canvas>
+                </div>
+            </div>
+            
+            <!-- TODAY DRIVER DASHBOARD CARD -->
+            <div class="today-driver-dashboard-card">
+                <div class="panel-header">
+                    <h2><i class="fas fa-user-clock"></i> Today's Driver Assignments</h2>
+                    <span class="badge" id="todayDriverDateSpan"></span>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Bus No</th>
+                                <th>Driver Name</th>
+                                <th>Assigned At</th>
+                            </tr>
+                        </thead>
+                        <tbody id="todayDriverDashboardBody">
+                            <tr>
+                                <td colspan="4" style="text-align:center; color:#94a3b8;">No drivers assigned today</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="data-panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-receipt"></i> Recent Bills</h2><span class="badge" id="todayDateSpan"></span>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Bill No</th>
+                                <th>Driver</th>
+                                <th>Bus</th>
+                                <th>Amount</th>
+                                <th>Sender</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="billsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- DRIVERS -->
+        <div id="driversView" class="hidden-view">
+            <div class="page-indicator"><i class="fas fa-id-card"></i> Driver Management</div>
+            <div class="driver-management-panel">
+                <div class="panel-header">
+                    <h2>Driver Directory</h2>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <button class="refresh-btn" id="refreshDriversBtn"><i class="fas fa-sync-alt"></i> Refresh</button>
+                        <button class="add-driver-btn" id="addDriverBtn"><i class="fas fa-plus-circle"></i> Add Driver</button>
+                    </div>
+                </div>
+                <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchDriverInput"
+                        placeholder="Search driver..."></div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Driver Name</th>
+                                <th>Mobile</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="driversTableBodyManage">
+                            <tr><td colspan="4" style="text-align:center; color:#94a3b8;">Loading drivers...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- BUSES -->
+        <div id="busesView" class="hidden-view">
+            <div class="page-indicator"><i class="fas fa-bus"></i> Bus Fleet</div>
+            <div class="driver-management-panel">
+                <div class="panel-header">
+                    <h2>Registered Buses</h2>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <button class="refresh-btn" id="refreshBusesBtn"><i class="fas fa-sync-alt"></i> Refresh</button>
+                        <button class="add-driver-btn" id="addBusBtn"><i class="fas fa-plus-circle"></i> Add Bus</button>
+                    </div>
+                </div>
+                <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchBusInput"
+                        placeholder="Search bus..."></div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Bus Number</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="busesTableBody">
+                            <tr><td colspan="3" style="text-align:center; color:#94a3b8;">Loading buses...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TODAY DRIVER -->
+        <div id="todayDriverView" class="hidden-view">
+            <div class="page-indicator"><i class="fas fa-user-clock"></i> Today Driver</div>
+            <div class="today-driver-container">
+                <div class="today-driver-form">
+                    <div class="form-group">
+                        <label><i class="fas fa-bus"></i> Select Bus</label>
+                        <select id="todayBusSelect">
+                            <option value="">-- Select Bus --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Select Driver</label>
+                        <select id="todayDriverSelect">
+                            <option value="">-- Select Driver --</option>
+                        </select>
+                    </div>
+                    <button class="add-btn" id="todayAddBtn"><i class="fas fa-plus"></i> Add</button>
+                </div>
+                <div class="today-driver-table">
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Bus No</th>
+                                    <th>Driver Name</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody id="todayDriverTableBody">
+                                <tr>
+                                    <td colspan="4" style="text-align:center; color:#94a3b8;">No drivers assigned today</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW BILLS -->
+        <div id="viewBillsView" class="hidden-view">
+            <div class="page-indicator"><i class="fas fa-receipt"></i> View Bill</div>
+            <div class="data-panel">
+                <div class="panel-header">
+                    <h2>Bill Filter</h2><button id="refreshBillsViewBtn" class="refresh-btn"><i
+                            class="fas fa-sync-alt"></i> Refresh</button>
+                </div>
+                <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchBillInput"
+                        placeholder="Search by bill no, sender..."></div>
+                <div class="table-wrapper">
+                    <table style="min-width:1000px;">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Date</th>
+                                <th>Bill No</th>
+                                <th>Sender</th>
+                                <th>Receiver</th>
+                                <th>Total</th>
+                                <th>Jama</th>
+                                <th>Baki</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allBillsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADD BILL -->
+        <div id="addBillView" class="hidden-view">
+            <div class="page-indicator"><i class="fas fa-plus-circle"></i> Create New Bill</div>
+            <div class="bill-container">
+                <div class="form-title">
+                    <h1><i class="fas fa-file-invoice-dollar"></i> New Transaction</h1>
+                </div>
+                <div class="form-grid">
+                    <div class="form-field"><label><i class="fas fa-hashtag"></i> Bill No</label><input type="text"
+                            id="billNo" class="readonly-bill" readonly></div>
+                    <div class="form-field"><label><i class="fas fa-calendar-alt"></i> Date</label><input type="date"
+                            id="billDate"></div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-field"><label><i class="fas fa-user-tie"></i> Driver Name</label><select
+                            id="driverName"></select></div>
+                    <div class="form-field"><label><i class="fas fa-bus"></i> Bus No</label><select id="busNo"></select>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-field"><label><i class="fas fa-mobile-alt"></i> Sender Mobile</label><input
+                            type="text" id="moklnarMobile" placeholder="Mobile number"></div>
+                    <div class="form-field"><label><i class="fas fa-user"></i> Sender Name</label><input type="text"
+                            id="moklnarName" placeholder="Full name"></div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-field"><label><i class="fas fa-mobile-alt"></i> Receiver Mobile</label><input
+                            type="text" id="lenarMobile" placeholder="Mobile number"></div>
+                    <div class="form-field"><label><i class="fas fa-user-check"></i> Receiver Name</label><input
+                            type="text" id="lenarName" placeholder="Full name"></div>
+                </div>
+                <div class="trip-section">
+                    <div class="trip-title"><i class="fas fa-map-marked-alt"></i> Trip Details</div>
+                    <table class="trip-table">
+                        <thead>
+                            <tr>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Description</th>
+                                <th>Qty</th>
+                                <th>Remark</th>
+                                <th>Amount (₹)</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tripTableBody">
+                            <tr>
+                                <td><input type="text" class="from-input" value="Rajkot"></td>
+                                <td><input type="text" class="to-input" value="Surat"></td>
+                                <td><input type="text" class="desc-input"></td>
+                                <td><input type="number" class="qty-input" value="1"></td>
+                                <td><input type="text" class="remark-input"></td>
+                                <td><input type="number" class="amount-input" value="0"></td>
+                                <td><button class="remove-row-btn"><i class="fas fa-trash-alt"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="add-row-btn" id="addRowBtn"><i class="fas fa-plus-circle"></i> Add More
+                        Items</button>
+                </div>
+                <div class="amount-row">
+                    <div class="amount-field"><label><i class="fas fa-wallet"></i> Total Amount (Jama)</label><input
+                            type="text" id="jamaRs" readonly placeholder="0.00"></div>
+                    <div class="amount-field"><label><i class="fas fa-hourglass-half"></i> Pending (Baki)</label><input
+                            type="text" id="bakiRs" value="0" placeholder="0"></div>
+                </div>
+                <button class="save-bill-btn" id="saveBillBtn"><i class="fas fa-save"></i> Save & Print Bill</button>
+            </div>
+        </div>
+
+        <!-- DATE REPORT -->
+        <div id="dateReportView" class="hidden-view">
+            <div class="page-indicator"><i class="fas fa-calendar-alt"></i> Date Report Analytics</div>
+            <div class="report-card">
+                <div class="report-header">
+                    <h2><i class="fas fa-chart-line"></i> Date Report</h2>
+                </div>
+                <div class="report-form">
+                    <div class="form-row"
+                        style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:28px;">
+                        <div class="form-group"><label>Select Date</label><input type="date" id="reportDate"
+                                style="width:100%; padding:14px; border-radius:60px; border:2px solid #e8edf2;"></div>
+                        <div class="form-group"><label>To City</label><select id="toCitySelect"
+                                style="width:100%; padding:14px; border-radius:60px;">
+                                <option value="all">All Cities</option>
+                                <option value="Surat">Surat</option>
+                                <option value="Ahmedabad">Ahmedabad</option>
+                                <option value="Rajkot">Rajkot</option>
+                            </select></div>
+                    </div>
+                    <button id="submitReportBtn" class="submit-btn"><i class="fas fa-search"></i> Generate
+                        Report</button>
+                </div>
+                <div id="resultArea" style="display:none; padding:32px;">
+                    <div style="display:flex; justify-content:space-between;">
+                        <h3>Bill Details</h3>
+                        <div id="totalAmountDisplay">₹0</div>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Bill No</th>
+                                    <th>To City</th>
+                                    <th>Sender</th>
+                                    <th>Driver</th>
+                                    <th>Bus No</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div id="emptyMessage" style="display:none; text-align:center;">No bills found</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MONTH REPORT -->
+        <div id="monthReportView" class="hidden-view">
+            <div class="page-indicator"><i class="fas fa-chart-line"></i> Month Report (City Wise)</div>
+            <div class="report-card">
+                <div class="report-header">
+                    <h2><i class="fas fa-calendar-alt"></i> Month Report (City Wise)</h2>
+                </div>
+                <div class="report-form">
+                    <div class="month-selector">
+                        <label style="font-weight:700;">Select Month:</label>
+                        <input type="month" id="monthReportPicker"
+                            style="padding:12px 20px; border-radius:60px; border:1px solid #e2e8f0;">
+                        <button id="generateMonthReportBtn" class="submit-btn" style="width:auto; padding:12px 32px;"><i
+                                class="fas fa-chart-bar"></i> Show Report</button>
+                    </div>
+                    <div class="table-wrapper">
+                        <table id="monthReportTable">
+                            <thead>
+                                <tr>
+                                    <th>To City</th>
+                                    <th>Total Bills</th>
+                                    <th>Total Parcels</th>
+                                    <th>Total Amount (Rs)</th>
+                                    <th>Total Jama</th>
+                                    <th>Total Baki</th>
+                                </tr>
+                            </thead>
+                            <tbody id="monthReportTableBody">
+                                <tr>
+                                    <td colspan="6" style="text-align:center;">Select a month to view report</td>
+                                </tr>
+                            </tbody>
+                            <tfoot id="monthReportFooter" style="display:none;"></tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>⚡ VERONIC • Complete Fleet Suite • Premium Fleet Management System</footer>
+    </div>
+    <div id="printBillArea" style="display:none;"></div>
+    <div id="reportPrintArea" style="display:none;"></div>
+
+    <script>
+        // ============================================================
+        // AUTHENTICATION SYSTEM - Backend API Integration
+        // ============================================================
+        const API_URL = `${window.location.origin}/api`;
+        const AUTH_KEY = 'veronic_auth_token';
+        let currentUser = null;
+
+        function getAuthToken() { return localStorage.getItem(AUTH_KEY); }
+        function setAuthToken(token) { localStorage.setItem(AUTH_KEY, token); }
+        function clearAuthToken() { localStorage.removeItem(AUTH_KEY); currentUser = null; }
+
+        async function loadAuthUser() {
+            const token = getAuthToken();
+            if (!token) return null;
+            try {
+                const response = await fetch(`${API_URL}/verify`, { headers: { 'Authorization': `Bearer ${token}` } });
+                const data = await response.json();
+                if (data.success && data.data.user) { currentUser = data.data.user; return currentUser; }
+                else { clearAuthToken(); return null; }
+            } catch (error) { console.error('Auth verification error:', error); clearAuthToken(); return null; }
+        }
+
+        function updateUserUI(user) {
+            const wrapper = document.getElementById('userAvatarWrapper');
+            const avatar = document.getElementById('userAvatar');
+            const fullName = document.getElementById('avatarFullName');
+            const email = document.getElementById('avatarEmail');
+            if (!user) { wrapper.style.display = 'none'; return; }
+            const firstLetter = user.email ? user.email.charAt(0).toUpperCase() : 'U';
+            avatar.textContent = firstLetter;
+            fullName.textContent = user.name || user.email || 'User';
+            email.textContent = user.email || '';
+            wrapper.style.display = 'inline-flex';
+        }
+
+        function toggleAvatarDropdown() { document.getElementById('avatarDropdown').classList.toggle('show'); }
+        function closeAvatarDropdown() { document.getElementById('avatarDropdown').classList.remove('show'); }
+        function showAuthOverlay(show = true) {
+            document.getElementById('authOverlay').classList.toggle('hidden', !show);
+            if (!show) document.getElementById('mainContent').style.display = 'block';
+            else document.getElementById('mainContent').style.display = 'none';
+        }
+
+        function togglePassword(inputId, iconEl) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') { input.type = 'text'; iconEl.classList.remove('fa-eye'); iconEl.classList.add('fa-eye-slash'); }
+            else { input.type = 'password'; iconEl.classList.remove('fa-eye-slash'); iconEl.classList.add('fa-eye'); }
+        }
+
+        function setButtonLoading(btnId, loading) {
+            const btn = document.getElementById(btnId);
+            if (!btn) return;
+            if (loading) { btn.innerHTML = `<span class="spinner"></span> Please wait...`; btn.disabled = true; }
+            else { btn.innerHTML = btn.dataset.originalHtml || btn.innerHTML; btn.disabled = false; }
+        }
+        document.querySelectorAll('.auth-btn').forEach(btn => { btn.dataset.originalHtml = btn.innerHTML; });
+
+        async function handleLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            document.getElementById('loginError').classList.remove('show');
+            document.getElementById('loginSuccess').classList.remove('show');
+            if (!email || !password) { document.getElementById('loginError').textContent = 'Please enter both email and password.'; document.getElementById('loginError').classList.add('show'); return; }
+            setButtonLoading('loginBtn', true);
+            try {
+                const response = await fetch(`${API_URL}/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
+                const data = await response.json();
+                if (data.success) {
+                    setAuthToken(data.data.token); currentUser = data.data.user;
+                    document.getElementById('loginSuccess').textContent = 'Login successful! Welcome back!';
+                    document.getElementById('loginSuccess').classList.add('show');
+                    setTimeout(() => { showAuthOverlay(false); updateUserUI(currentUser); showToast('Welcome back, ' + currentUser.name + '!'); refreshAllViews(); showView('dashboard'); }, 600);
+                } else {
+                    document.getElementById('loginError').textContent = data.message || 'Login failed. Please try again.';
+                    document.getElementById('loginError').classList.add('show');
+                }
+            } catch (error) { console.error('Login error:', error); document.getElementById('loginError').textContent = 'Network error. Please check your connection.'; document.getElementById('loginError').classList.add('show'); }
+            finally { setButtonLoading('loginBtn', false); }
+        }
+
+        async function handleSignup() {
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value.trim();
+            const confirm = document.getElementById('signupConfirm').value.trim();
+            document.getElementById('signupError').classList.remove('show');
+            document.getElementById('signupSuccess').classList.remove('show');
+            if (!name || !email || !password || !confirm) { document.getElementById('signupError').textContent = 'Please fill in all fields.'; document.getElementById('signupError').classList.add('show'); return; }
+            if (password.length < 3) { document.getElementById('signupError').textContent = 'Password must be at least 3 characters.'; document.getElementById('signupError').classList.add('show'); return; }
+            if (password !== confirm) { document.getElementById('signupError').textContent = 'Passwords do not match.'; document.getElementById('signupError').classList.add('show'); return; }
+            setButtonLoading('signupBtn', true);
+            try {
+                const response = await fetch(`${API_URL}/signup`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, password }) });
+                const data = await response.json();
+                if (data.success) {
+                    setAuthToken(data.data.token); currentUser = data.data.user;
+                    document.getElementById('signupSuccess').textContent = 'Account created successfully!';
+                    document.getElementById('signupSuccess').classList.add('show');
+                    setTimeout(() => { showAuthOverlay(false); updateUserUI(currentUser); showToast('Welcome, ' + currentUser.name + '! Your account has been created.'); refreshAllViews(); showView('dashboard'); }, 800);
+                } else {
+                    document.getElementById('signupError').textContent = data.message || 'Signup failed. Please try again.';
+                    document.getElementById('signupError').classList.add('show');
+                }
+            } catch (error) { console.error('Signup error:', error); document.getElementById('signupError').textContent = 'Network error. Please check your connection.'; document.getElementById('signupError').classList.add('show'); }
+            finally { setButtonLoading('signupBtn', false); }
+        }
+
+        async function logout() {
+            const token = getAuthToken();
+            if (token) { try { await fetch(`${API_URL}/logout`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token }) }); } catch (error) { console.error('Logout error:', error); } }
+            clearAuthToken(); closeAvatarDropdown(); showAuthOverlay(true);
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('signupForm').style.display = 'none';
+            document.getElementById('loginError').classList.remove('show');
+            document.getElementById('loginSuccess').classList.remove('show');
+            document.getElementById('signupError').classList.remove('show');
+            document.getElementById('signupSuccess').classList.remove('show');
+            document.getElementById('loginEmail').value = 'admin@veronic.com';
+            document.getElementById('loginPassword').value = 'admin123';
+            document.getElementById('userAvatarWrapper').style.display = 'none';
+            showToast('Logged out successfully');
+        }
+
+        document.getElementById('showSignup').addEventListener('click', function () { document.getElementById('loginForm').style.display = 'none'; document.getElementById('signupForm').style.display = 'block'; document.getElementById('loginError').classList.remove('show'); document.getElementById('loginSuccess').classList.remove('show'); document.getElementById('signupError').classList.remove('show'); document.getElementById('signupSuccess').classList.remove('show'); });
+        document.getElementById('showLogin').addEventListener('click', function () { document.getElementById('signupForm').style.display = 'none'; document.getElementById('loginForm').style.display = 'block'; document.getElementById('loginError').classList.remove('show'); document.getElementById('loginSuccess').classList.remove('show'); document.getElementById('signupError').classList.remove('show'); document.getElementById('signupSuccess').classList.remove('show'); });
+        document.getElementById('loginBtn').addEventListener('click', handleLogin);
+        document.getElementById('signupBtn').addEventListener('click', handleSignup);
+        document.getElementById('loginPassword').addEventListener('keypress', function (e) { if (e.key === 'Enter') handleLogin(); });
+        document.getElementById('loginEmail').addEventListener('keypress', function (e) { if (e.key === 'Enter') handleLogin(); });
+        document.getElementById('signupConfirm').addEventListener('keypress', function (e) { if (e.key === 'Enter') handleSignup(); });
+
+        document.getElementById('userAvatarWrapper').addEventListener('click', function (e) { e.stopPropagation(); toggleAvatarDropdown(); });
+        document.getElementById('avatarLogoutBtn').addEventListener('click', function (e) { e.stopPropagation(); logout(); });
+        document.addEventListener('click', function (e) { const wrapper = document.getElementById('userAvatarWrapper'); if (wrapper && !wrapper.contains(e.target)) { closeAvatarDropdown(); } });
+
+        // ============================================================
+        // API AND APP LOGIC
+        // ============================================================
+        async function fetchDrivers() { 
+            try { 
+                const response = await fetch(`${API_URL}/drivers`); 
+                const data = await response.json(); 
+                return data; 
+            } catch (error) { 
+                console.error('Error fetching drivers:', error); 
+                return []; 
+            } 
+        }
+
+        async function fetchBuses() { 
+            try { 
+                const response = await fetch(`${API_URL}/buses`); 
+                const data = await response.json(); 
+                return data; 
+            } catch (error) { 
+                console.error('Error fetching buses:', error); 
+                return []; 
+            } 
+        }
+
+        async function fetchBills() { 
+            try { 
+                const response = await fetch(`${API_URL}/bills`); 
+                const data = await response.json(); 
+                for (let bill of data) { 
+                    try { 
+                        const itemsResponse = await fetch(`${API_URL}/bills/${bill.id}/items`); 
+                        bill.items = await itemsResponse.json(); 
+                    } catch (e) { 
+                        bill.items = []; 
+                    } 
+                } 
+                return data; 
+            } catch (error) { 
+                console.error('Error fetching bills:', error); 
+                return []; 
+            } 
+        }
+
+        async function fetchStats() { 
+            try { 
+                const response = await fetch(`${API_URL}/stats`); 
+                const data = await response.json(); 
+                return data; 
+            } catch (error) { 
+                console.error('Error fetching stats:', error); 
+                return null; 
+            } 
+        }
+
+        let drivers = [], buses = [], bills = [], todayDrivers = [];
+        let weeklyChart = null, cityChart = null;
+        let currentReportData = [];
+
+        function showToast(msg) { 
+            let t = document.createElement('div'); 
+            t.className = 'toast-msg'; 
+            t.innerText = msg; 
+            document.body.appendChild(t); 
+            setTimeout(() => t.remove(), 2600); 
+        }
+
+        async function refreshAllViews() { 
+            if (!currentUser) return; 
+            await refreshDashboardStats(); 
+            await renderDriverTable(); 
+            await renderBusTable(); 
+            await renderAllBillsTable(); 
+            await loadTodayDrivers(); 
+        }
+
+        function getTodayStr() { return new Date().toISOString().slice(0, 10); }
+        function escapeHtml(str) { if (!str) return ''; return String(str).replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])); }
+
+        // ============================================================
+        // BILL NUMBER GENERATION - SEQUENTIAL FROM 001
+        // ============================================================
+        function generateBillNumber() {
+            // Get all existing bill numbers
+            const existingBills = bills.map(b => b.bill_no);
+            
+            // Extract numbers from VER-XXX format
+            const numbers = existingBills
+                .filter(billNo => billNo.startsWith('VER-'))
+                .map(billNo => {
+                    const num = parseInt(billNo.replace('VER-', ''));
+                    return isNaN(num) ? 0 : num;
+                })
+                .filter(num => num > 0);
+            
+            // Find the highest number
+            let maxNum = 0;
+            if (numbers.length > 0) {
+                maxNum = Math.max(...numbers);
+            }
+            
+            // Next number is max + 1
+            const nextNum = maxNum + 1;
+            
+            // Format as 3-digit with leading zeros
+            const formattedNum = String(nextNum).padStart(3, '0');
+            return `VER-${formattedNum}`;
+        }
+
+        // ============================================================
+        // TODAY DRIVER - FIXED DROPDOWNS
+        // ============================================================
+        async function loadTodayDrivers() {
+            try {
+                const response = await fetch(`${API_URL}/today-drivers`);
+                todayDrivers = await response.json();
+                renderTodayDriverTable();
+                renderTodayDriverDashboard();
+                await populateTodayDropdowns();
+            } catch (error) {
+                console.error('Error loading today drivers:', error);
+                todayDrivers = [];
+                renderTodayDriverTable();
+                renderTodayDriverDashboard();
+            }
+        }
+
+        function renderTodayDriverDashboard() {
+            const tbody = document.getElementById('todayDriverDashboardBody');
+            if (!tbody) return;
+            if (todayDrivers.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#94a3b8;">No drivers assigned today</td></tr>';
+                return;
+            }
+            tbody.innerHTML = todayDrivers.map((td, idx) => `
+                <tr>
+                    <td>${idx + 1}</td>
+                    <td><strong>${escapeHtml(td.bus_number)}</strong></td>
+                    <td>${escapeHtml(td.driver_name)}</td>
+                    <td>${td.assigned_at || new Date().toLocaleTimeString()}</td>
+                </tr>
+            `).join('');
+            document.getElementById('todayDriverDateSpan').innerText = getTodayStr();
+        }
+
+        function renderTodayDriverTable() {
+            const tbody = document.getElementById('todayDriverTableBody');
+            if (!tbody) return;
+            if (todayDrivers.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#94a3b8;">No drivers assigned today</td></tr>';
+                return;
+            }
+            tbody.innerHTML = todayDrivers.map((td, idx) => `
+                <tr>
+                    <td>${idx + 1}</td>
+                    <td><strong>${escapeHtml(td.bus_number)}</strong></td>
+                    <td>${escapeHtml(td.driver_name)}</td>
+                    <td><button class="delete-today-btn" data-id="${td.id}"><i class="fas fa-trash"></i> Delete</button></td>
+                </tr>
+            `).join('');
+            tbody.querySelectorAll('.delete-today-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const id = parseInt(btn.dataset.id);
+                    if (confirm('Remove this driver from today\'s list?')) {
+                        try {
+                            await fetch(`${API_URL}/today-drivers/${id}`, { method: 'DELETE' });
+                            showToast('✅ Driver removed from today\'s list');
+                            await loadTodayDrivers();
+                        } catch (error) {
+                            console.error('Error removing today driver:', error);
+                            showToast('❌ Error removing driver');
+                        }
+                    }
+                });
+            });
+        }
+
+        async function populateTodayDropdowns() {
+            const busSelect = document.getElementById('todayBusSelect');
+            const driverSelect = document.getElementById('todayDriverSelect');
+            if (!busSelect || !driverSelect) return;
+
+            // Fetch latest from DB
+            try {
+                drivers = await fetchDrivers();
+                buses = await fetchBuses();
+                console.log('Drivers for dropdown:', drivers.length);
+                console.log('Buses for dropdown:', buses.length);
+            } catch (error) {
+                console.error('Error fetching data for dropdowns:', error);
+                drivers = [];
+                buses = [];
+            }
+
+            const assignedBusIds = todayDrivers.map(td => td.bus_id);
+            const assignedDriverIds = todayDrivers.map(td => td.driver_id);
+
+            // Populate Bus dropdown
+            let busOptions = '';
+            if (buses.length === 0) {
+                busOptions = '<option value="" disabled>No buses available</option>';
+            } else {
+                busOptions = buses.map(b => {
+                    const isAssigned = assignedBusIds.includes(b.id);
+                    return `<option value="${b.id}" ${isAssigned ? 'disabled style="color:#999;"' : ''}>${escapeHtml(b.bus_number)} ${isAssigned ? '(Assigned Today)' : ''}</option>`;
+                }).join('');
+            }
+            busSelect.innerHTML = `<option value="">-- Select Bus --</option>${busOptions}`;
+
+            // Populate Driver dropdown
+            let driverOptions = '';
+            if (drivers.length === 0) {
+                driverOptions = '<option value="" disabled>No drivers available</option>';
+            } else {
+                driverOptions = drivers.map(d => {
+                    const isAssigned = assignedDriverIds.includes(d.id);
+                    return `<option value="${d.id}" ${isAssigned ? 'disabled style="color:#999;"' : ''}>${escapeHtml(d.name)} ${isAssigned ? '(Assigned Today)' : ''}</option>`;
+                }).join('');
+            }
+            driverSelect.innerHTML = `<option value="">-- Select Driver --</option>${driverOptions}`;
+        }
+
+        // Click event to refresh dropdowns when user clicks on them
+        document.getElementById('todayBusSelect')?.addEventListener('click', async function() {
+            if (this.options.length <= 1) { // Only has the default option
+                this.innerHTML = '<option value="">Loading buses...</option>';
+                await populateTodayDropdowns();
+            }
+        });
+
+        document.getElementById('todayDriverSelect')?.addEventListener('click', async function() {
+            if (this.options.length <= 1) { // Only has the default option
+                this.innerHTML = '<option value="">Loading drivers...</option>';
+                await populateTodayDropdowns();
+            }
+        });
+
+        document.getElementById('todayAddBtn')?.addEventListener('click', async () => {
+            const busId = document.getElementById('todayBusSelect').value;
+            const driverId = document.getElementById('todayDriverSelect').value;
+            if (!busId || !driverId) { showToast('Please select both Bus and Driver'); return; }
+
+            const alreadyAssigned = todayDrivers.some(td => td.driver_id === parseInt(driverId));
+            if (alreadyAssigned) { showToast('❌ This driver is already assigned today!'); return; }
+            const busAlreadyAssigned = todayDrivers.some(td => td.bus_id === parseInt(busId));
+            if (busAlreadyAssigned) { showToast('❌ This bus is already assigned today!'); return; }
+
+            try {
+                const response = await fetch(`${API_URL}/today-drivers`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ busId: parseInt(busId), driverId: parseInt(driverId) })
+                });
+                const result = await response.json();
+                if (result.success) { 
+                    showToast('✅ Driver assigned for today!'); 
+                    await loadTodayDrivers(); 
+                } else { 
+                    showToast('❌ ' + (result.message || 'Error assigning driver')); 
+                }
+            } catch (error) { console.error('Error adding today driver:', error); showToast('❌ Error assigning driver'); }
+        });
+
+        // ============================================================
+        // REPORT PRINT POPUP
+        // ============================================================
+        function showReportPrintPopup(reportData, reportTitle, reportType) {
+            const popup = document.getElementById('reportPrintPopup');
+            const body = document.getElementById('reportPrintPopupBody');
+            currentReportData = reportData;
+            let reportHTML = generateReportHTML(reportData, reportTitle, reportType);
+            body.innerHTML = reportHTML;
+            popup.classList.add('active');
+        }
+
+        function closeReportPrintPopup() { document.getElementById('reportPrintPopup').classList.remove('active'); }
+
+        function printReportFromPopup() {
+            const popupBody = document.getElementById('reportPrintPopupBody');
+            const printContent = popupBody.innerHTML;
+            const printWindow = window.open('', '_blank', 'width=1100,height=800');
+            printWindow.document.write(`
+                <html><head><title>Print Report</title>
+                <style>
+                    body { font-family: 'Arial', 'Gujarati', 'Noto Sans Gujarati', sans-serif; margin: 20px; background: white; }
+                    .report-print-card { max-width: 1000px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; font-size: 13px; line-height: 1.6; }
+                    .report-print-card .report-print-header { text-align: center; border-bottom: 3px double #c0392b; padding-bottom: 15px; margin-bottom: 20px; }
+                    .report-print-card .report-print-header h1 { color: #c0392b; font-size: 24px; margin-bottom: 5px; letter-spacing: 2px; }
+                    .report-print-card .report-print-header p { margin: 4px 0; font-size: 13px; color: #333; }
+                    .report-print-card .report-print-header .report-date { font-size: 12px; color: #666; margin-top: 8px; }
+                    .report-print-card .report-print-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 12px; }
+                    .report-print-card .report-print-table th { background: #fef3e8; padding: 10px 12px; border: 1px solid #ddd; text-align: center; font-weight: bold; color: #1e5a7d; }
+                    .report-print-card .report-print-table td { padding: 8px 12px; border: 1px solid #ddd; text-align: left; }
+                    .report-print-card .report-print-table .total-row { background: #f97316 !important; font-weight: bold; color: white; }
+                    .report-print-card .report-print-table .total-row td { color: white; font-weight: bold; }
+                    .report-print-card .report-print-footer { margin-top: 15px; padding-top: 10px; border-top: 2px dashed #e67e22; font-size: 10px; line-height: 1.6; text-align: center; color: #666; }
+                    @media print { body { margin: 0; padding: 10px; } }
+                </style>
+                </head><body>${printContent}
+                <script>
+                    window.onload = function() { window.print(); window.onafterprint = function() { window.close(); }; setTimeout(function() { window.close(); }, 30000); }
+                <\/script>
+                </body></html>
+            `);
+            printWindow.document.close();
+            closeReportPrintPopup();
+        }
+
+        function downloadReportAsCSV() {
+            if (!currentReportData || currentReportData.length === 0) { showToast("❌ No data to download"); return; }
+            const headers = Object.keys(currentReportData[0]);
+            let csvContent = headers.join(',') + '\n';
+            currentReportData.forEach(item => {
+                const row = headers.map(header => {
+                    let value = item[header] || '';
+                    if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) { value = '"' + value.replace(/"/g, '""') + '"'; }
+                    return value;
+                });
+                csvContent += row.join(',') + '\n';
+            });
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `report_${new Date().toISOString().slice(0, 10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            showToast("✅ Report downloaded successfully!");
+        }
+
+        function generateReportHTML(reportData, reportTitle, reportType) {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+            let tableHtml = '';
+            if (reportData.length === 0) { tableHtml = '<tr><td colspan="7" style="text-align:center;">No data found</td></tr>'; } else {
+                const headers = Object.keys(reportData[0]);
+                let headerRow = headers.map(h => `<th>${escapeHtml(h)}</th>`).join('');
+                let rows = '';
+                reportData.forEach((item, idx) => {
+                    let cells = headers.map(h => { let val = item[h] || ''; if (typeof val === 'number') { val = val.toLocaleString('en-IN'); } return `<td>${escapeHtml(String(val))}</td>`; }).join('');
+                    rows += `<tr>${cells}</tr>`;
+                });
+                tableHtml = `<thead><tr>${headerRow}</tr></thead><tbody>${rows}</tbody>`;
+            }
+            let totalRow = '';
+            if (reportData.length > 0 && reportData[0].hasOwnProperty('Amount (₹)')) {
+                let total = reportData.reduce((sum, item) => sum + (parseFloat(item['Amount (₹)']) || 0), 0);
+                const totalCols = Object.keys(reportData[0]).length;
+                totalRow = `<tfoot><tr class="total-row"><td colspan="${totalCols - 1}" style="text-align:right;"><strong>GRAND TOTAL</strong></td><td><strong>₹${total.toLocaleString('en-IN')}</strong></td></tr></tfoot>`;
+            } else if (reportData.length > 0 && reportData[0].hasOwnProperty('Total Amount (₹)')) {
+                let total = reportData.reduce((sum, item) => sum + (parseFloat(item['Total Amount (₹)']) || 0), 0);
+                const totalCols = Object.keys(reportData[0]).length;
+                totalRow = `<tfoot><tr class="total-row"><td colspan="${totalCols - 1}" style="text-align:right;"><strong>GRAND TOTAL</strong></td><td><strong>₹${total.toLocaleString('en-IN')}</strong></td></tr></tfoot>`;
+            }
+            return `
+                <div class="report-print-card">
+                    <div class="report-print-header">
+                        <h1>${escapeHtml(reportTitle)}</h1>
+                        <p>VERONIC TRAVELS - Premium Fleet Management</p>
+                        <p style="font-size:13px; color:#333;">Rajkot – Surat Transport Service</p>
+                        <div class="report-date"><span>📅 Generated on: ${dateStr} at ${timeStr}</span><span style="margin-left:20px;">📋 Report Type: ${escapeHtml(reportType)}</span></div>
+                    </div>
+                    <table class="report-print-table">${tableHtml}</table>${totalRow}
+                    <div class="report-print-footer">
+                        <p>This is a system generated report from VERONIC TRAVELS Fleet Management System</p>
+                        <p>© ${new Date().getFullYear()} VERONIC TRAVELS - All Rights Reserved</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ============================================================
+        // DASHBOARD STATS
+        // ============================================================
+        async function refreshDashboardStats() {
+            if (!currentUser) return;
+            const stats = await fetchStats();
+            if (stats) {
+                document.getElementById('statDrivers').innerText = stats.totalDrivers || 0;
+                document.getElementById('statTodayBills').innerText = stats.todayBills || 0;
+                document.getElementById('statMonthRev').innerHTML = '₹' + (stats.monthRevenue || 0).toLocaleString('en-IN');
+                document.getElementById('statActiveBuses').innerText = stats.activeBuses || 0;
+            }
+            bills = await fetchBills();
+            const billsBody = document.getElementById('billsTableBody');
+            if (!billsBody) return;
+            if (bills.length === 0) { billsBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No bills</td></tr>'; } else {
+                billsBody.innerHTML = bills.slice().reverse().slice(0, 5).map(b =>
+                    `<tr><td>${escapeHtml(b.bill_no)}</td><td>${escapeHtml(b.driver_name)}</td><td>${escapeHtml(b.bus_no)}</td><td>₹${(b.total || 0).toLocaleString()}</td><td>${escapeHtml(b.moklnar_name)}</td><td>${b.date}</td></tr>`
+                ).join('');
+            }
+            document.getElementById('todayDateSpan').innerText = getTodayStr();
+            updateAllCharts();
+        }
+
+        // ============================================================
+        // DRIVERS
+        // ============================================================
+        let currentEditDriverId = null;
+
+        function openDriverModal(isEdit = false, driverData = null) {
+            const modal = document.getElementById('globalModal');
+            const modalHtml = `<h3><i class="fas ${isEdit ? 'fa-edit' : 'fa-user-plus'}"></i> ${isEdit ? 'Edit Driver' : 'Add Driver'}</h3>
+                <div class="form-field"><label><i class="fas fa-user"></i> Driver Name</label><input type="text" id="modalDriverName" value="${isEdit ? escapeHtml(driverData.name) : ''}" placeholder="Enter driver name"></div>
+                <div class="form-field"><label><i class="fas fa-mobile-alt"></i> Mobile Number</label><input type="text" id="modalDriverMobile" value="${isEdit ? driverData.mobile : ''}" placeholder="Mobile number"></div>
+                <div class="modal-buttons"><button class="modal-cancel" id="closeModalBtn">Cancel</button><button class="modal-save" id="saveModalBtn">Save</button></div>`;
+            document.getElementById('modalContentDynamic').innerHTML = modalHtml;
+            modal.classList.add('active');
+            currentEditDriverId = isEdit ? driverData.id : null;
+            document.getElementById('closeModalBtn').addEventListener('click', () => modal.classList.remove('active'));
+            document.getElementById('saveModalBtn').addEventListener('click', async () => {
+                const name = document.getElementById('modalDriverName').value.trim();
+                const mobile = document.getElementById('modalDriverMobile').value.trim();
+                if (!name) { showToast("Driver name required"); return; }
+                try {
+                    if (currentEditDriverId) { 
+                        await fetch(`${API_URL}/drivers/${currentEditDriverId}`, { 
+                            method: 'PUT', 
+                            headers: { 'Content-Type': 'application/json' }, 
+                            body: JSON.stringify({ name, mobile: mobile || "0000000000" }) 
+                        }); 
+                        showToast("✅ Driver updated successfully!"); 
+                    } else { 
+                        await fetch(`${API_URL}/drivers`, { 
+                            method: 'POST', 
+                            headers: { 'Content-Type': 'application/json' }, 
+                            body: JSON.stringify({ name, mobile: mobile || "0000000000" }) 
+                        }); 
+                        showToast("✅ Driver added successfully!"); 
+                    }
+                    modal.classList.remove('active');
+                    await renderDriverTable(); 
+                    await renderBusTable(); 
+                    await refreshDashboardStats(); 
+                    populateBillDropdowns(); 
+                    await loadTodayDrivers();
+                } catch (error) { console.error('Error saving driver:', error); showToast("❌ Error saving driver"); }
+            });
+        }
+
+        async function renderDriverTable() {
+            if (!currentUser) return;
+            drivers = await fetchDrivers();
+            const tbody = document.getElementById('driversTableBodyManage');
+            if (!tbody) return;
+            const searchTerm = document.getElementById('searchDriverInput')?.value.toLowerCase() || '';
+            let filtered = drivers;
+            if (searchTerm) filtered = drivers.filter(d => d.name.toLowerCase().includes(searchTerm));
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#94a3b8;">No drivers found</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = filtered.map((d, idx) => `
+                <tr><td>${idx + 1}</td><td>${escapeHtml(d.name)}</td><td>${d.mobile || 'N/A'}</td>
+                <td class="action-buttons-cell">
+                    <button class="edit-driver-btn" data-id="${d.id}" data-name="${escapeHtml(d.name)}" data-mobile="${d.mobile}"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="delete-driver-btn" data-id="${d.id}"><i class="fas fa-trash"></i> Del</button>
+                </td></tr>
+            `).join('');
+            attachDriverEvents();
+        }
+
+        function attachDriverEvents() {
+            document.querySelectorAll('.delete-driver-btn').forEach(btn => { 
+                btn.addEventListener('click', async () => { 
+                    let id = parseInt(btn.dataset.id); 
+                    if (confirm("Delete driver?")) { 
+                        try { 
+                            await fetch(`${API_URL}/drivers/${id}`, { method: 'DELETE' }); 
+                            showToast("✅ Driver deleted successfully!"); 
+                            await renderDriverTable(); 
+                            await renderBusTable(); 
+                            await refreshDashboardStats(); 
+                            populateBillDropdowns(); 
+                            await loadTodayDrivers(); 
+                        } catch (error) { 
+                            console.error('Error deleting driver:', error); 
+                            showToast("❌ Error deleting driver"); 
+                        } 
+                    } 
+                }); 
+            });
+            document.querySelectorAll('.edit-driver-btn').forEach(btn => { 
+                btn.addEventListener('click', () => { 
+                    let id = parseInt(btn.dataset.id); 
+                    let driver = drivers.find(d => d.id === id); 
+                    if (driver) openDriverModal(true, driver); 
+                }); 
+            });
+        }
+
+        // ============================================================
+        // BUSES
+        // ============================================================
+        let currentEditBusId = null;
+
+        async function openBusModal(isEdit = false, busData = null) {
+            const modal = document.getElementById('globalModal');
+            const modalHtml = `<h3><i class="fas ${isEdit ? 'fa-edit' : 'fa-bus'}"></i> ${isEdit ? 'Edit Bus' : 'Add Bus'}</h3>
+                <div class="form-field"><label><i class="fas fa-bus"></i> Bus Number</label><input type="text" id="modalBusNumber" value="${isEdit ? escapeHtml(busData.bus_number) : ''}" placeholder="Enter bus number"></div>
+                <div class="modal-buttons"><button class="modal-cancel" id="closeBusModalBtn">Cancel</button><button class="modal-save" id="saveBusModalBtn">Save</button></div>`;
+            document.getElementById('modalContentDynamic').innerHTML = modalHtml;
+            modal.classList.add('active');
+            currentEditBusId = isEdit ? busData.id : null;
+            document.getElementById('closeBusModalBtn').addEventListener('click', () => modal.classList.remove('active'));
+            document.getElementById('saveBusModalBtn').addEventListener('click', async () => {
+                const busNumber = document.getElementById('modalBusNumber').value.trim();
+                if (!busNumber) { showToast("Bus number required"); return; }
+                try {
+                    if (currentEditBusId) { 
+                        await fetch(`${API_URL}/buses/${currentEditBusId}`, { 
+                            method: 'PUT', 
+                            headers: { 'Content-Type': 'application/json' }, 
+                            body: JSON.stringify({ busNumber }) 
+                        }); 
+                        showToast("✅ Bus updated successfully!"); 
+                    } else { 
+                        await fetch(`${API_URL}/buses`, { 
+                            method: 'POST', 
+                            headers: { 'Content-Type': 'application/json' }, 
+                            body: JSON.stringify({ busNumber }) 
+                        }); 
+                        showToast("✅ Bus added successfully!"); 
+                    }
+                    modal.classList.remove('active');
+                    await renderBusTable(); 
+                    await renderDriverTable(); 
+                    await refreshDashboardStats(); 
+                    populateBillDropdowns(); 
+                    await loadTodayDrivers();
+                } catch (error) { console.error('Error saving bus:', error); showToast("❌ Error saving bus"); }
+            });
+        }
+
+        async function renderBusTable() {
+            if (!currentUser) return;
+            buses = await fetchBuses();
+            const tbody = document.getElementById('busesTableBody');
+            if (!tbody) return;
+            
+            if (buses.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#94a3b8;">No buses found</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = buses.map((b, idx) => `
+                <tr><td>${idx + 1}</td><td><strong>${escapeHtml(b.bus_number)}</strong></td>
+                <td class="action-buttons-cell">
+                    <button class="edit-bus-btn" data-id="${b.id}" data-bus="${b.bus_number}"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="delete-bus-btn" data-id="${b.id}"><i class="fas fa-trash"></i> Del</button>
+                </td></tr>
+            `).join('');
+            attachBusEvents();
+        }
+
+        function attachBusEvents() {
+            document.querySelectorAll('.delete-bus-btn').forEach(btn => { 
+                btn.addEventListener('click', async () => { 
+                    let id = parseInt(btn.dataset.id); 
+                    if (confirm("Delete bus?")) { 
+                        try { 
+                            await fetch(`${API_URL}/buses/${id}`, { method: 'DELETE' }); 
+                            showToast("✅ Bus deleted successfully!"); 
+                            await renderBusTable(); 
+                            await renderDriverTable(); 
+                            await refreshDashboardStats(); 
+                            populateBillDropdowns(); 
+                            await loadTodayDrivers(); 
+                        } catch (error) { 
+                            console.error('Error deleting bus:', error); 
+                            showToast("❌ Error deleting bus"); 
+                        } 
+                    } 
+                }); 
+            });
+            document.querySelectorAll('.edit-bus-btn').forEach(btn => { 
+                btn.addEventListener('click', () => { 
+                    let id = parseInt(btn.dataset.id); 
+                    let bus = buses.find(b => b.id === id); 
+                    if (bus) openBusModal(true, bus); 
+                }); 
+            });
+        }
+
+        // ============================================================
+        // BILLS
+        // ============================================================
+        async function renderAllBillsTable() {
+            if (!currentUser) return;
+            bills = await fetchBills();
+            const tbody = document.getElementById('allBillsTableBody');
+            if (!tbody) return;
+            let filtered = bills;
+            const searchTerm = document.getElementById('searchBillInput')?.value.toLowerCase() || '';
+            if (searchTerm) { filtered = bills.filter(b => b.bill_no.toLowerCase().includes(searchTerm) || b.moklnar_name.toLowerCase().includes(searchTerm)); }
+            filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:#94a3b8;">No bills found</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = filtered.map((b, idx) => `
+                <tr><td>${idx + 1}</td><td>${b.date}</td><td><strong>${b.bill_no}</strong></td>
+                <td>${escapeHtml(b.moklnar_name)}</td><td>${escapeHtml(b.lenar_name)}</td>
+                <td>₹${(b.total || 0).toLocaleString()}</td><td>₹${(b.jama || 0).toLocaleString()}</td><td>₹${(b.baki || 0).toLocaleString()}</td>
+                <td class="action-buttons-cell">
+                    <button class="print-bill-btn" data-id="${b.id}"><i class="fas fa-print"></i> Print</button>
+                    <button class="action-bill-delete" data-id="${b.id}"><i class="fas fa-trash-alt"></i> Delete</button>
+                    <button class="action-bill-edit" data-id="${b.id}"><i class="fas fa-edit"></i> Edit</button>
+                </td></tr>
+            `).join('');
+            attachBillEvents();
+        }
+
+        async function showPrintPopupForBill(billId) {
+            const bill = bills.find(b => b.id === billId);
+            if (!bill) { showToast("❌ Bill not found"); return; }
+            try {
+                const response = await fetch(`${API_URL}/bills/${billId}/items`);
+                const items = await response.json();
+                const billData = {
+                    billNo: bill.bill_no, bill_no: bill.bill_no, date: bill.date,
+                    driver: bill.driver_name, driver_name: bill.driver_name,
+                    busNo: bill.bus_no, bus_no: bill.bus_no,
+                    moklnar: bill.moklnar_name, moklnar_name: bill.moklnar_name,
+                    moklnarMobile: bill.moklnar_mobile || '', moklnar_mobile: bill.moklnar_mobile || '',
+                    lenar: bill.lenar_name || 'N/A', lenar_name: bill.lenar_name || 'N/A',
+                    lenarMobile: bill.lenar_mobile || '', lenar_mobile: bill.lenar_mobile || '',
+                    total: bill.total || 0, jama: bill.jama || 0, baki: bill.baki || 0,
+                    items: items || []
+                };
+                showPrintPopup(billData);
+            } catch (error) { console.error('Error fetching bill items for print:', error); showToast("❌ Error loading bill for printing"); }
+        }
+
+        async function openEditBillModal(bill) {
+            try {
+                const response = await fetch(`${API_URL}/bills/${bill.id}/items`);
+                const items = await response.json();
+                const modal = document.getElementById('globalModal');
+                let itemsHtml = '';
+                (items || []).forEach((item, idx) => {
+                    itemsHtml += `
+                        <div class="edit-trip-card">
+                            <div class="form-field"><label>Trip ${idx + 1} - From</label><input type="text" id="edit_from_${idx}" value="${escapeHtml(item.from_city || 'Rajkot')}"></div>
+                            <div class="form-field"><label>To</label><input type="text" id="edit_to_${idx}" value="${escapeHtml(item.to_city || 'Surat')}"></div>
+                            <div class="form-field"><label>Description</label><input type="text" id="edit_desc_${idx}" value="${escapeHtml(item.description || '')}"></div>
+                            <div class="form-field"><label>Qty</label><input type="number" id="edit_qty_${idx}" value="${item.qty || 1}"></div>
+                            <div class="form-field"><label>Remark</label><input type="text" id="edit_remark_${idx}" value="${escapeHtml(item.remark || '')}"></div>
+                            <div class="form-field"><label>Amount (₹)</label><input type="number" id="edit_amount_${idx}" value="${item.amount || 0}"></div>
+                        </div>
+                    `;
+                });
+                const modalHtml = `
+                    <h3><i class="fas fa-edit"></i> Edit Bill - ${bill.bill_no}</h3>
+                    <div class="form-field"><label><i class="fas fa-calendar"></i> Date</label><input type="date" id="edit_date" value="${bill.date}"></div>
+                    <div class="form-field"><label><i class="fas fa-user-tie"></i> Driver Name</label><input type="text" id="edit_driver" value="${escapeHtml(bill.driver_name)}"></div>
+                    <div class="form-field"><label><i class="fas fa-bus"></i> Bus No</label><input type="text" id="edit_bus" value="${escapeHtml(bill.bus_no)}"></div>
+                    <div class="form-field"><label><i class="fas fa-user-tie"></i> Sender Name</label><input type="text" id="edit_sender" value="${escapeHtml(bill.moklnar_name)}"></div>
+                    <div class="form-field"><label><i class="fas fa-mobile-alt"></i> Sender Mobile</label><input type="text" id="edit_sender_mobile" value="${escapeHtml(bill.moklnar_mobile || '')}"></div>
+                    <div class="form-field"><label><i class="fas fa-user-check"></i> Receiver Name</label><input type="text" id="edit_receiver" value="${escapeHtml(bill.lenar_name)}"></div>
+                    <div class="form-field"><label><i class="fas fa-mobile-alt"></i> Receiver Mobile</label><input type="text" id="edit_receiver_mobile" value="${escapeHtml(bill.lenar_mobile || '')}"></div>
+                    <div class="form-field"><label><i class="fas fa-wallet"></i> Total Amount</label><input type="number" id="edit_total" value="${bill.total || 0}"></div>
+                    <div class="form-field"><label><i class="fas fa-hourglass-half"></i> Baki</label><input type="number" id="edit_baki" value="${bill.baki || 0}"></div>
+                    <div style="margin:16px 0 8px 0; font-weight:800;"><i class="fas fa-map-marked-alt"></i> Trip Details</div>
+                    <div class="edit-items-container" id="editItemsContainer">${itemsHtml}</div>
+                    <div class="modal-buttons"><button class="modal-cancel" id="closeEditModalBtn">Cancel</button><button class="modal-save" id="confirmEditBillBtn">Update Bill</button></div>
+                `;
+                document.getElementById('modalContentDynamic').innerHTML = modalHtml;
+                modal.classList.add('active');
+                document.getElementById('closeEditModalBtn').addEventListener('click', () => modal.classList.remove('active'));
+                document.getElementById('confirmEditBillBtn').addEventListener('click', async () => {
+                    const updatedItems = [];
+                    const itemCount = items.length;
+                    for (let idx = 0; idx < itemCount; idx++) {
+                        updatedItems.push({
+                            from: document.getElementById(`edit_from_${idx}`)?.value || 'Rajkot',
+                            to: document.getElementById(`edit_to_${idx}`)?.value || 'Surat',
+                            desc: document.getElementById(`edit_desc_${idx}`)?.value || '',
+                            qty: parseInt(document.getElementById(`edit_qty_${idx}`)?.value) || 1,
+                            remark: document.getElementById(`edit_remark_${idx}`)?.value || '',
+                            amount: parseFloat(document.getElementById(`edit_amount_${idx}`)?.value) || 0
+                        });
+                    }
+                    const updatedBill = {
+                        date: document.getElementById('edit_date').value,
+                        driver: document.getElementById('edit_driver').value,
+                        busNo: document.getElementById('edit_bus').value,
+                        moklnar: document.getElementById('edit_sender').value,
+                        moklnarMobile: document.getElementById('edit_sender_mobile').value || '0000000000',
+                        lenar: document.getElementById('edit_receiver').value || 'N/A',
+                        lenarMobile: document.getElementById('edit_receiver_mobile').value || '0000000000',
+                        total: parseFloat(document.getElementById('edit_total').value) || 0,
+                        jama: parseFloat(document.getElementById('edit_total').value) || 0,
+                        baki: parseFloat(document.getElementById('edit_baki').value) || 0,
+                        items: updatedItems
+                    };
+                    try {
+                        await fetch(`${API_URL}/bills/${bill.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(updatedBill) });
+                        modal.classList.remove('active');
+                        showToast("✅ Bill updated successfully!");
+                        await renderAllBillsTable();
+                        await refreshDashboardStats();
+                    } catch (error) { console.error('Error updating bill:', error); showToast("❌ Error updating bill"); }
+                });
+            } catch (error) { console.error('Error opening edit modal:', error); showToast("❌ Error loading bill details"); }
+        }
+
+        function attachBillEvents() {
+            document.querySelectorAll('.print-bill-btn').forEach(btn => { btn.addEventListener('click', () => { let id = parseInt(btn.dataset.id); showPrintPopupForBill(id); }); });
+            document.querySelectorAll('.action-bill-delete').forEach(btn => { btn.addEventListener('click', async () => { let id = parseInt(btn.dataset.id); if (confirm("Delete this bill?")) { try { await fetch(`${API_URL}/bills/${id}`, { method: 'DELETE' }); showToast("✅ Bill deleted successfully!"); await renderAllBillsTable(); await refreshDashboardStats(); } catch (error) { console.error('Error deleting bill:', error); showToast("❌ Error deleting bill"); } } }); });
+            document.querySelectorAll('.action-bill-edit').forEach(btn => { btn.addEventListener('click', () => { let id = parseInt(btn.dataset.id); let bill = bills.find(b => b.id === id); if (bill) openEditBillModal(bill); }); });
+        }
+
+        function calculateTotal() {
+            let total = 0;
+            document.querySelectorAll('.amount-input').forEach(inp => { total += parseFloat(inp.value) || 0; });
+            document.getElementById('jamaRs').value = total.toFixed(2);
+            return total;
+        }
+
+        function bindAmountEvents() { 
+            document.querySelectorAll('.amount-input').forEach(inp => inp.addEventListener('input', calculateTotal)); 
+            calculateTotal(); 
+        }
+
+        document.getElementById('addRowBtn')?.addEventListener('click', () => {
+            let tbody = document.getElementById('tripTableBody');
+            let newRow = document.createElement('tr');
+            newRow.innerHTML = `<td><input type="text" class="from-input" value="Rajkot"></td><td><input type="text" class="to-input" value="Ahmedabad"></td><td><input type="text" class="desc-input"></td><td><input type="number" class="qty-input" value="1"></td><td><input type="text" class="remark-input"></td><td><input type="number" class="amount-input" value="0"></td><td><button class="remove-row-btn"><i class="fas fa-trash-alt"></i></button></td>`;
+            tbody.appendChild(newRow);
+            bindAmountEvents();
+            newRow.querySelector('.remove-row-btn').addEventListener('click', () => newRow.remove());
+            calculateTotal();
+        });
+
+        function generateBillHTML(billData) {
+            let itemsHtml = '', totalQty = 0, totalAmount = 0;
+            const items = billData.items || [];
+            if (items.length === 0) { itemsHtml = '<tr><td colspan="5" style="text-align:center;">No items</td></tr>'; } else {
+                items.forEach((item, idx) => {
+                    const qty = parseInt(item.qty) || 1;
+                    const amount = parseFloat(item.amount) || 0;
+                    totalQty += qty; totalAmount += amount;
+                    const fromCity = item.from || item.from_city || 'Rajkot';
+                    const toCity = item.to || item.to_city || 'Surat';
+                    itemsHtml += `<tr><td style="padding: 6px 8px; border: 1px solid #ddd; text-align: center;">${idx + 1}</td><td style="padding: 6px 8px; border: 1px solid #ddd;">${escapeHtml(fromCity)}</td><td style="padding: 6px 8px; border: 1px solid #ddd;">${escapeHtml(toCity)}</td><td style="padding: 6px 8px; border: 1px solid #ddd; text-align: center;">${qty}</td><td style="padding: 6px 8px; border: 1px solid #ddd; text-align: right;">₹${amount.toFixed(2)}</td></tr>`;
+                });
+            }
+            const firstItem = items.length > 0 ? items[0] : {};
+            const fromCity = firstItem.from || firstItem.from_city || 'Rajkot';
+            const toCity = firstItem.to || firstItem.to_city || 'Surat';
+            const billNo = billData.billNo || billData.bill_no || 'N/A';
+            const date = billData.date || new Date().toISOString().slice(0, 10);
+            const moklnar = billData.moklnar || billData.moklnar_name || '';
+            const lenar = billData.lenar || billData.lenar_name || 'N/A';
+            const moklnarMobile = billData.moklnarMobile || billData.moklnar_mobile || '';
+            const lenarMobile = billData.lenarMobile || billData.lenar_mobile || '';
+            const driver = billData.driver || billData.driver_name || '';
+            const total = billData.total || 0;
+            const jama = billData.jama || total;
+            const baki = billData.baki || 0;
+            return `
+                <div class="print-bill-card">
+                    <div class="print-header">
+                        <h1>NEW VERONIC TRAVELS (ભાણી)</h1>
+                        <p style="font-weight: bold;">Rajkot – Surat Transport Service</p>
+                        <p>એક્સિલ કોમ્પ્યુલેટર, વાલડી મેઈન રોડ, પીજીભૂમિકોર્સ એક્સિલ ઓફિસ પાસે, રાજકોટ-360004</p>
+                        <p style="font-weight: bold;">+91 83201 48345 | +91 88669 94020</p>
+                    </div>
+                    <div class="print-details-grid">
+                        <div><strong>રાજકોટ થી</strong> <span style="font-weight: bold;">${escapeHtml(fromCity)}</span></div>
+                        <div style="text-align: right;"><strong>રાજકોટ થી</strong> <span style="font-weight: bold;">${escapeHtml(toCity)}</span></div>
+                        <div><strong>બિલ નં:</strong> <span style="font-weight: bold;">${escapeHtml(billNo)}</span></div>
+                        <div style="text-align: right;"><strong>તારીખ:</strong> ${date}</div>
+                        <div><strong>મોકલનાર:</strong> ${escapeHtml(moklnar)}</div>
+                        <div style="text-align: right;"><strong>લેનાર:</strong> ${escapeHtml(lenar)}</div>
+                        <div><strong>મોબાઈલ:</strong> ${escapeHtml(moklnarMobile)}</div>
+                        <div style="text-align: right;"><strong>મોબાઈલ:</strong> ${escapeHtml(lenarMobile)}</div>
+                        <div><strong>જ્યાયો:</strong> ${escapeHtml(driver)}</div>
+                        <div style="text-align: right;"><strong>વર્ષન:</strong> ₹${(total).toFixed(2)}</div>
+                        <div><strong>જમા:</strong> ₹${(jama).toFixed(2)}</div>
+                        <div style="text-align: right;"><strong>બાકી:</strong> ₹${(baki).toFixed(2)}</div>
+                    </div>
+                    <table class="print-items-table"><thead><tr><th>#</th><th>From</th><th>To</th><th>Qty</th><th>Amount (₹)</th></tr></thead><tbody>${itemsHtml}</tbody><tfoot><tr class="total-row"><td colspan="3" style="text-align: right;">TOTAL</td><td style="text-align: center;">${totalQty}</td><td style="text-align: right;">₹${totalAmount.toFixed(2)}</td></tr></tfoot></table>
+                    <div class="print-footer">
+                        <p style="font-weight: bold; text-align: center;">સુરત ઓફિસ રૂપા એપ્રેટમેન્ટ, ઓસીસ ફોર્લેની બાજુમા, ઉમિયાધામ મીટર સામે, વૈશાલી સિનેશ રોડ, સુરત</p>
+                        <p style="text-align: center; font-size: 9px;">મોબાઈલ નંબર: 8980191525 / 8733850185, કોન-026125612525</p>
+                        <p style="font-size: 9px; text-align: justify; border-top: 1px solid #eee; padding-top: 8px; margin-top: 8px;"><strong>નોંધ:</strong> પરસ્કાર ગાડીમાં એક્સિલ્ડર, ભોજનાજણ, ભાગ ટૂર, સજ્જણું ની આમરી કેન્દ્રની ની જવાદી રહેલે નહીં. સંજોગોવસતા પાસેલ બોવાય જાય તો જે પરકેળ કરી લેવામાં આવી કરી તે જાણ પરત મળતો. તમારી વસ્તુની ક્રિયત મળતો નહીં આ બાબત તમારે તકારા કે કોઈ-કેટલેક ચાલતો નહીં. બિલ વગર નો માલ લેવામાં આવતો નહીં, બિલ વગરનો માલ પકડાય છે તો લેવાર પાઈ અને મોકલવાર પાઈ ની જવાબદારી રહેલે. ઉપરના નિયમો મુજબ હું પાસેલ મારી જવાબદારી ઉપર મોકલું છું. પાસેલ બાબતે કેન્દ્રની ની કોઈ જવાબદારી નથી.</p>
+                    </div>
+                    <div class="print-signature"><div><p><strong>મોકલનાર સહી</strong></p><div class="sign-line"></div></div><div style="text-align: center;"><p><strong>નોંધ:</strong> બિલ વગર નો માલ લેવામાં આવતો નહીં</p></div><div style="text-align: right;"><p><strong>લેનાર સહી</strong></p><div class="sign-line"></div></div></div>
+                    <div class="print-thankyou">🙏 Thank You!</div>
+                </div>
+            `;
+        }
+
+        function showPrintPopup(billData) {
+            const popup = document.getElementById('printPopup');
+            const body = document.getElementById('printPopupBody');
+            body.innerHTML = generateBillHTML(billData);
+            popup.classList.add('active');
+        }
+
+        function closePrintPopup() { document.getElementById('printPopup').classList.remove('active'); }
+
+        function printFromPopup() {
+            const popupBody = document.getElementById('printPopupBody');
+            const printContent = popupBody.innerHTML;
+            const printWindow = window.open('', '_blank', 'width=800,height=600');
+            printWindow.document.write(`
+                <html><head><title>Print Bill</title>
+                <style>
+                    body { font-family: 'Arial', 'Gujarati', 'Noto Sans Gujarati', sans-serif; margin: 20px; background: white; }
+                    .print-bill-card { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; font-size: 13px; line-height: 1.6; }
+                    .print-bill-card .print-header { text-align: center; border-bottom: 3px double #c0392b; padding-bottom: 12px; margin-bottom: 15px; }
+                    .print-bill-card .print-header h1 { color: #c0392b; font-size: 22px; margin-bottom: 4px; letter-spacing: 2px; }
+                    .print-bill-card .print-header p { margin: 4px 0; font-size: 12px; }
+                    .print-bill-card .print-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 20px; background: #fef9f0; padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #f0e2d4; font-size: 12px; }
+                    .print-bill-card .print-details-grid div { padding: 2px 0; }
+                    .print-bill-card .print-details-grid strong { color: #1e5a7d; }
+                    .print-bill-card .print-items-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12px; }
+                    .print-bill-card .print-items-table th { background: #fef3e8; padding: 6px 8px; border: 1px solid #ddd; text-align: center; font-weight: bold; color: #1e5a7d; }
+                    .print-bill-card .print-items-table td { padding: 6px 8px; border: 1px solid #ddd; text-align: left; }
+                    .print-bill-card .print-items-table .total-row { background: #fff0e0; font-weight: bold; }
+                    .print-bill-card .print-footer { margin-top: 12px; padding-top: 10px; border-top: 2px dashed #e67e22; font-size: 10px; line-height: 1.6; }
+                    .print-bill-card .print-footer p { margin: 4px 0; }
+                    .print-bill-card .print-signature { margin-top: 12px; display: flex; justify-content: space-between; font-size: 11px; padding-top: 8px; }
+                    .print-bill-card .print-signature div { text-align: center; }
+                    .print-bill-card .print-signature .sign-line { margin-top: 20px; border-top: 1px solid #333; width: 120px; padding-top: 4px; }
+                    .print-bill-card .print-thankyou { text-align: center; margin-top: 8px; font-weight: bold; font-size: 14px; color: #c0392b; }
+                    @media print { body { margin: 0; padding: 10px; } }
+                </style>
+                </head><body>${printContent}
+                <script>
+                    window.onload = function() { window.print(); window.onafterprint = function() { window.close(); }; setTimeout(function() { window.close(); }, 30000); }
+                <\/script>
+                </body></html>
+            `);
+            printWindow.document.close();
+            closePrintPopup();
+        }
+
+        document.getElementById('saveBillBtn')?.addEventListener('click', async function (e) {
+            e.preventDefault();
+            let items = [];
+            document.querySelectorAll('#tripTableBody tr').forEach(row => {
+                const fromVal = row.querySelector('.from-input')?.value || '';
+                const toVal = row.querySelector('.to-input')?.value || '';
+                const descVal = row.querySelector('.desc-input')?.value || '';
+                const qtyVal = parseInt(row.querySelector('.qty-input')?.value) || 1;
+                const remarkVal = row.querySelector('.remark-input')?.value || '';
+                const amountVal = parseFloat(row.querySelector('.amount-input')?.value) || 0;
+                items.push({ from: fromVal || 'Rajkot', to: toVal || 'Surat', desc: descVal, qty: qtyVal, remark: remarkVal, amount: amountVal });
+            });
+            const billNo = document.getElementById('billNo').value;
+            const billDate = document.getElementById('billDate').value || getTodayStr();
+            const driverName = document.getElementById('driverName').value;
+            const busNo = document.getElementById('busNo').value;
+            const moklnarName = document.getElementById('moklnarName').value.trim();
+            const moklnarMobile = document.getElementById('moklnarMobile').value.trim();
+            const lenarName = document.getElementById('lenarName').value.trim();
+            const lenarMobile = document.getElementById('lenarMobile').value.trim();
+            const totalAmount = parseFloat(document.getElementById('jamaRs').value) || 0;
+            const bakiAmount = parseFloat(document.getElementById('bakiRs').value) || 0;
+            if (!driverName || !busNo || !moklnarName) { alert("Please fill all required fields: Driver Name, Bus No, and Sender Name."); return; }
+            if (items.length === 0 || items.every(item => item.amount === 0)) { alert("Please add at least one trip item with a valid amount."); return; }
+            const billData = {
+                billNo, bill_no: billNo, date: billDate, driver: driverName, driver_name: driverName,
+                busNo, bus_no: busNo, moklnar: moklnarName, moklnar_name: moklnarName,
+                moklnarMobile: moklnarMobile || "0000000000", moklnar_mobile: moklnarMobile || "0000000000",
+                lenar: lenarName || "N/A", lenar_name: lenarName || "N/A",
+                lenarMobile: lenarMobile || "0000000000", lenar_mobile: lenarMobile || "0000000000",
+                total: totalAmount, jama: totalAmount, baki: bakiAmount, items
+            };
+            try {
+                await fetch(`${API_URL}/bills`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(billData) });
+                showToast("✅ Bill saved successfully!");
+                showPrintPopup(billData);
+                document.getElementById('billNo').value = generateBillNumber();
+                document.getElementById('billDate').valueAsDate = new Date();
+                document.getElementById('moklnarName').value = '';
+                document.getElementById('moklnarMobile').value = '';
+                document.getElementById('lenarName').value = '';
+                document.getElementById('lenarMobile').value = '';
+                document.getElementById('jamaRs').value = '0.00';
+                document.getElementById('bakiRs').value = '0';
+                const tripBody = document.getElementById('tripTableBody');
+                tripBody.innerHTML = `<tr><td><input type="text" class="from-input" value="Rajkot"></td><td><input type="text" class="to-input" value="Surat"></td><td><input type="text" class="desc-input"></td><td><input type="number" class="qty-input" value="1"></td><td><input type="text" class="remark-input"></td><td><input type="number" class="amount-input" value="0"></td><td><button class="remove-row-btn"><i class="fas fa-trash-alt"></i></button></td></tr>`;
+                tripBody.querySelector('.remove-row-btn').addEventListener('click', function () { this.closest('tr')?.remove(); calculateTotal(); });
+                bindAmountEvents(); calculateTotal();
+                await renderAllBillsTable(); await refreshDashboardStats();
+            } catch (error) { console.error('Error saving bill:', error); alert("Error saving bill. Please try again."); }
+        });
+
+        document.getElementById('printPopupCancel')?.addEventListener('click', closePrintPopup);
+        document.getElementById('printPopupPrint')?.addEventListener('click', printFromPopup);
+        document.getElementById('printPopup')?.addEventListener('click', function (e) { if (e.target === this) { closePrintPopup(); } });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closePrintPopup(); } });
+        document.getElementById('reportPrintPopupCancel')?.addEventListener('click', closeReportPrintPopup);
+        document.getElementById('reportPrintPopupPrint')?.addEventListener('click', printReportFromPopup);
+        document.getElementById('reportDownloadBtn')?.addEventListener('click', downloadReportAsCSV);
+        document.getElementById('reportPrintPopup')?.addEventListener('click', function (e) { if (e.target === this) { closeReportPrintPopup(); } });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeReportPrintPopup(); } });
+
+        async function populateBillDropdowns() {
+            drivers = await fetchDrivers(); 
+            buses = await fetchBuses();
+            let driverSelect = document.getElementById('driverName');
+            if (!driverSelect) return;
+            driverSelect.innerHTML = '<option value="">Select</option>' + drivers.map(d => `<option value="${escapeHtml(d.name)}">${escapeHtml(d.name)}</option>`).join('');
+            let busSelect = document.getElementById('busNo');
+            if (!busSelect) return;
+            busSelect.innerHTML = '<option value="">Select</option>' + buses.map(b => `<option value="${escapeHtml(b.bus_number)}">${b.bus_number}</option>`).join('');
+        }
+
+        function updateAllCharts() {
+            const ctx = document.getElementById('weeklyChart')?.getContext('2d');
+            if (ctx) {
+                let days = [], revenues = [];
+                for (let i = 6; i >= 0; i--) { let d = new Date(); d.setDate(d.getDate() - i); let dayStr = d.toISOString().slice(0, 10); days.push(dayStr.slice(5)); revenues.push(bills.filter(b => b.date === dayStr).reduce((s, b) => s + (b.total || 0), 0)); }
+                if (weeklyChart) weeklyChart.destroy();
+                weeklyChart = new Chart(ctx, { type: 'line', data: { labels: days, datasets: [{ label: 'Revenue (₹)', data: revenues, borderColor: '#e67e22', backgroundColor: 'rgba(230,126,34,0.1)', fill: true, tension: 0.3 }] } });
+            }
+            const pieCtx = document.getElementById('cityPieChart')?.getContext('2d');
+            if (pieCtx) {
+                let cityMap = new Map();
+                bills.forEach(b => { let city = 'Surat'; if (b.items && b.items.length > 0 && b.items[0].to_city) { city = b.items[0].to_city; } cityMap.set(city, (cityMap.get(city) || 0) + (b.total || 0)); });
+                if (cityChart) cityChart.destroy();
+                const colors = ['#e67e22', '#2a5298', '#0f5c3f', '#b45309', '#6b21a5', '#c084fc', '#fbbf24'];
+                cityChart = new Chart(pieCtx, { type: 'pie', data: { labels: Array.from(cityMap.keys()), datasets: [{ data: Array.from(cityMap.values()), backgroundColor: colors.slice(0, cityMap.size) }] } });
+            }
+        }
+
+        async function generateMonthReport() {
+            if (!currentUser) return;
+            const selectedMonth = document.getElementById('monthReportPicker').value;
+            if (!selectedMonth) { alert("Please select a month"); return; }
+            try {
+                const response = await fetch(`${API_URL}/bills/month/${selectedMonth}`);
+                const monthBills = await response.json();
+                const cityStats = new Map();
+                monthBills.forEach(bill => {
+                    let toCity = 'Other';
+                    if (bill.items && bill.items.length > 0 && bill.items[0].to_city) { toCity = bill.items[0].to_city; }
+                    if (!cityStats.has(toCity)) { cityStats.set(toCity, { bills: 0, parcels: 0, totalAmount: 0, totalJama: 0, totalBaki: 0 }); }
+                    const stat = cityStats.get(toCity);
+                    stat.bills += 1;
+                    let parcels = 0;
+                    if (bill.items) { bill.items.forEach(item => { parcels += parseInt(item.qty) || 0; }); }
+                    stat.parcels += parcels;
+                    stat.totalAmount += (bill.total || 0);
+                    stat.totalJama += (bill.jama || 0);
+                    stat.totalBaki += (bill.baki || 0);
+                });
+                const tbody = document.getElementById('monthReportTableBody');
+                if (cityStats.size === 0) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No bills found for this month</td></tr>'; document.getElementById('monthReportFooter').style.display = 'none'; showToast("❌ No bills found for this month"); return; }
+                let grandTotalAmount = 0, grandTotalJama = 0, grandTotalBaki = 0, grandTotalParcels = 0, rows = '';
+                let reportData = [];
+                for (let [city, data] of cityStats.entries()) {
+                    rows += `<tr><td><strong>${escapeHtml(city)}</strong></td><td>${data.bills}</td><td>${data.parcels}</td><td>₹${data.totalAmount.toLocaleString('en-IN')}</td><td>₹${data.totalJama.toLocaleString('en-IN')}</td><td>₹${data.totalBaki.toLocaleString('en-IN')}</td></tr>`;
+                    grandTotalAmount += data.totalAmount;
+                    grandTotalJama += data.totalJama;
+                    grandTotalBaki += data.totalBaki;
+                    grandTotalParcels += data.parcels;
+                    reportData.push({ 'City': city, 'Total Bills': data.bills, 'Total Parcels': data.parcels, 'Total Amount (₹)': data.totalAmount, 'Total Jama (₹)': data.totalJama, 'Total Baki (₹)': data.totalBaki });
+                }
+                tbody.innerHTML = rows;
+                const footer = document.getElementById('monthReportFooter');
+                footer.innerHTML = `<tr class="grand-total-row"><td><strong>GRAND TOTAL</strong></td><td>${cityStats.size}</td><td><strong>${grandTotalParcels}</strong></td><td><strong>₹${grandTotalAmount.toLocaleString('en-IN')}</strong></td><td><strong>₹${grandTotalJama.toLocaleString('en-IN')}</strong></td><td><strong>₹${grandTotalBaki.toLocaleString('en-IN')}</strong></td></tr>`;
+                footer.style.display = 'table-footer-group';
+                const monthName = new Date(selectedMonth + '-01').toLocaleString('default', { month: 'long', year: 'numeric' });
+                showReportPrintPopup(reportData, `Monthly Report - ${monthName}`, 'Month Report');
+            } catch (error) { console.error('Error generating month report:', error); showToast("❌ Error generating month report"); }
+        }
+
+        function setActiveNavButton(activeView) {
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            if (activeView === 'dashboard') document.querySelector('.nav-btn[data-nav="dashboard"]')?.classList.add('active');
+            else if (activeView === 'drivers') document.querySelector('.nav-btn[data-nav="drivers"]')?.classList.add('active');
+            else if (activeView === 'buses') document.querySelector('.nav-btn[data-nav="buses"]')?.classList.add('active');
+            else if (activeView === 'todayDriver') document.querySelector('.nav-btn[data-nav="todayDriver"]')?.classList.add('active');
+            else if (activeView === 'viewBills') document.querySelector('.nav-btn[data-nav="viewBills"]')?.classList.add('active');
+            else if (activeView === 'addBill') document.getElementById('addBillQuickNav')?.classList.add('active');
+        }
+
+        function showView(viewName) {
+            if (!currentUser) return;
+            document.querySelectorAll('#dashboardView, #driversView, #busesView, #todayDriverView, #viewBillsView, #addBillView, #dateReportView, #monthReportView').forEach(v => v.classList.add('hidden-view'));
+            if (viewName === 'dashboard') { 
+                document.getElementById('dashboardView').classList.remove('hidden-view'); 
+                setActiveNavButton('dashboard'); 
+                refreshDashboardStats(); 
+            } else if (viewName === 'drivers') { 
+                document.getElementById('driversView').classList.remove('hidden-view'); 
+                setActiveNavButton('drivers'); 
+                renderDriverTable(); 
+            } else if (viewName === 'buses') { 
+                document.getElementById('busesView').classList.remove('hidden-view'); 
+                setActiveNavButton('buses'); 
+                renderBusTable(); 
+            } else if (viewName === 'todayDriver') { 
+                document.getElementById('todayDriverView').classList.remove('hidden-view'); 
+                setActiveNavButton('todayDriver'); 
+                loadTodayDrivers(); 
+            } else if (viewName === 'viewBills') { 
+                document.getElementById('viewBillsView').classList.remove('hidden-view'); 
+                setActiveNavButton('viewBills'); 
+                renderAllBillsTable(); 
+            } else if (viewName === 'addBill') { 
+                document.getElementById('addBillView').classList.remove('hidden-view'); 
+                setActiveNavButton('addBill'); 
+                populateBillDropdowns(); 
+                bindAmountEvents(); 
+                document.getElementById('billNo').value = generateBillNumber(); 
+                document.getElementById('billDate').valueAsDate = new Date(); 
+                document.querySelectorAll('.remove-row-btn').forEach(btn => { 
+                    btn.addEventListener('click', function () { this.closest('tr')?.remove(); calculateTotal(); }); 
+                }); 
+            } else if (viewName === 'dateReport') {
+                document.getElementById('dateReportView').classList.remove('hidden-view');
+                setActiveNavButton(null);
+                document.getElementById('reportDate').value = getTodayStr();
+                document.getElementById('submitReportBtn').onclick = async () => {
+                    let date = document.getElementById('reportDate').value;
+                    let city = document.getElementById('toCitySelect').value;
+                    try {
+                        const response = await fetch(`${API_URL}/bills/date/${date}`);
+                        let filtered = await response.json();
+                        if (city !== 'all') { filtered = filtered.filter(b => { let toCity = 'Surat'; if (b.items && b.items.length > 0 && b.items[0].to_city) { toCity = b.items[0].to_city; } return toCity === city; }); }
+                        const total = filtered.reduce((s, b) => s + (b.total || 0), 0);
+                        document.getElementById('totalAmountDisplay').innerHTML = '₹' + total.toLocaleString();
+                        const tbody = document.getElementById('reportTableBody');
+                        let reportData = [];
+                        if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No bills</td></tr>'; showToast("❌ No bills found for this date"); } else {
+                            tbody.innerHTML = filtered.map((b, idx) => {
+                                let toCity = 'Surat';
+                                if (b.items && b.items.length > 0 && b.items[0].to_city) { toCity = b.items[0].to_city; }
+                                reportData.push({ '#': idx + 1, 'Bill No': b.bill_no, 'To City': toCity, 'Sender': b.moklnar_name, 'Driver': b.driver_name, 'Bus No': b.bus_no, 'Amount (₹)': b.total || 0 });
+                                return `<tr><td>${idx + 1}</td><td><strong>${b.bill_no}</strong></td><td><span class="city-badge">${toCity}</span></td><td>${b.moklnar_name}</td><td>${b.driver_name}</td><td>${b.bus_no}</td><td>₹${(b.total || 0).toLocaleString()}</td></tr>`;
+                            }).join('');
+                        }
+                        document.getElementById('resultArea').style.display = 'block';
+                        if (reportData.length > 0) { showReportPrintPopup(reportData, `Date Report - ${date}`, `Date Report (${city === 'all' ? 'All Cities' : city})`); }
+                    } catch (error) { console.error('Error generating date report:', error); showToast("❌ Error generating report"); }
+                };
+            } else if (viewName === 'monthReport') {
+                document.getElementById('monthReportView').classList.remove('hidden-view');
+                setActiveNavButton(null);
+                if (!document.getElementById('monthReportPicker').value) { const now = new Date(); document.getElementById('monthReportPicker').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`; }
+                generateMonthReport();
+            }
+        }
+
+        document.querySelectorAll('[data-nav]').forEach(el => { el.addEventListener('click', (e) => { e.preventDefault(); showView(el.getAttribute('data-nav')); closeSidebar(); }); });
+        document.querySelectorAll('[data-action]').forEach(el => { el.addEventListener('click', (e) => { e.preventDefault(); let act = el.getAttribute('data-action'); if (act === 'dateReport') showView('dateReport'); else if (act === 'monthReport') showView('monthReport'); else { showToast('Daily City Report - Coming Soon'); } closeSidebar(); document.getElementById('reportsDropdown')?.classList.remove('show'); }); });
+        document.getElementById('addDriverBtn')?.addEventListener('click', () => openDriverModal(false, null));
+        document.getElementById('addBusBtn')?.addEventListener('click', () => openBusModal(false, null));
+        document.getElementById('addBillQuick')?.addEventListener('click', (e) => { e.preventDefault(); showView('addBill'); closeSidebar(); });
+        document.getElementById('addBillQuickNav')?.addEventListener('click', () => showView('addBill'));
+        document.getElementById('sidebarLogout')?.addEventListener('click', (e) => { e.preventDefault(); logout(); closeSidebar(); });
+        document.getElementById('refreshBillsViewBtn')?.addEventListener('click', () => renderAllBillsTable());
+        document.getElementById('searchBillInput')?.addEventListener('input', () => renderAllBillsTable());
+        document.getElementById('searchDriverInput')?.addEventListener('input', () => renderDriverTable());
+        document.getElementById('searchBusInput')?.addEventListener('input', () => renderBusTable());
+        document.getElementById('generateMonthReportBtn')?.addEventListener('click', generateMonthReport);
+        document.getElementById('monthReportPicker')?.addEventListener('change', generateMonthReport);
+
+        document.getElementById('refreshDriversBtn')?.addEventListener('click', () => renderDriverTable());
+        document.getElementById('refreshBusesBtn')?.addEventListener('click', () => renderBusTable());
+
+        const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('overlay'), mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('active'); }
+        function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('active'); }
+        mobileMenuBtn.addEventListener('click', openSidebar);
+        overlay.addEventListener('click', closeSidebar);
+
+        const reportsBtn = document.getElementById('reportsDropdownBtn'), reportsDropdown = document.getElementById('reportsDropdown');
+        if (reportsBtn) {
+            reportsBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); reportsDropdown.classList.toggle('show'); });
+        }
+        document.addEventListener('click', (e) => { if (reportsBtn && !reportsBtn.contains(e.target) && reportsDropdown && !reportsDropdown.contains(e.target)) { reportsDropdown.classList.remove('show'); } });
+
+        // ============================================================
+        // INITIALIZATION
+        // ============================================================
+        async function init() {
+            const user = await loadAuthUser();
+            if (user) { 
+                showAuthOverlay(false); 
+                updateUserUI(user); 
+                showToast('Welcome back, ' + user.name + '!'); 
+                await refreshAllViews(); 
+                showView('dashboard'); 
+            } else { 
+                showAuthOverlay(true); 
+                document.getElementById('mainContent').style.display = 'none'; 
+            }
+        }
+        init();
+    </script>
+</body>
+
+</html>
